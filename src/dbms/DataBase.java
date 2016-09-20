@@ -14,17 +14,39 @@ import java.util.ArrayList;
 public class DataBase {
     
     public String name;
-    ArrayList<Table> recordList = new ArrayList<Table>();
+    ArrayList<Table> tablesList = new ArrayList<Table>();
     
-    public boolean createTable(String DBname) {        
+    public void createTable(String DBname) {
+        try {
+            if(!nameHasDatabase(DBname)) 
+            tablesList.add(new Table(DBname));
+        } catch(Exception e) {System.out.println("DataBase.createTable: " + e);}
     }
     
-    public boolean dropTable(String DBname) {
-        
+    public void dropTable(String DBname) {
+        try {
+            for(int i=0; i<tablesList.size(); i++) {
+                if(name.equals(tablesList.get(i).name)) {
+                    tablesList.get(i).delete();
+                }   
+            }
+        } catch(Exception e) {System.out.println("DataBase.dropTable: " + e);}        
     }
     
     public void serialize() {
         
+    }
+    
+    //here can be iterator
+    private boolean nameHasDatabase(String name) {
+        try {
+            for(int i=0; i<tablesList.size(); i++) {
+                if(name.equals(tablesList.get(i).name)) {
+                    return true;
+                }            
+            }            
+        } catch(Exception e) {System.out.println("DataBase.nameHasDatabase: " + e);}
+        return false; //check this
     }
     
 }

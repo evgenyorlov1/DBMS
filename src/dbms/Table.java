@@ -15,10 +15,18 @@ public class Table {
     
     public String name;
     ArrayList<Record> recordList = new ArrayList<Record>();
-          
-    public void insert() {}
     
-    public void view() {}
+    public Table(String name) {
+        this.name = name;        
+    }
+          
+    public void insert(Record record) {
+        recordList.add(record);
+    }
+    
+    public ArrayList<Record> view() {
+        return recordList;
+    }
     
     public void delete() {}
     

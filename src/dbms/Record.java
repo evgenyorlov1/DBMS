@@ -12,48 +12,62 @@ package dbms;
  *
  * @author pc
  */
-public class Record {
+public class Record  {
     public int integer;
     public float real;
     public long longint;
     public char symbol;
     public String html;
+    public static String[] metadata = {"Integer","Real","Longint","Char","HTML"};
     
     // different parametrs can be overloaded via constructor, builder, maps or varargs
     public Record(int integer, float real, long longint, char symbol, String html) {
-        this.integer = integer;
-        this.real = real;
-        this.longint = longint;
-        this.symbol = symbol;
-        this.html = html;
+        try {
+            this.integer = integer;
+            this.real = real;
+            this.longint = longint;
+            this.symbol = symbol;
+            this.html = html;
+        } catch(Exception e) {System.out.println("Record.Record: " + e);}
     }
     
+    // updates everything; switch to update some value
     public void update(int integer, float real, long longint, char symbol, String html) {
-        this.integer = integer;
-        this.real = real;
-        this.longint = longint;
-        this.symbol = symbol;
-        this.html = html;
+        try {
+            this.integer = integer;
+            this.real = real;
+            this.longint = longint;
+            this.symbol = symbol;
+            this.html = html;
+        } catch(Exception e) {System.out.println("Record.update: " + e);}
     }
     
     public int getInteger() {
-        return 0;
+        return this.integer;
     }
     
     public float getReal() {
-        return 0;       
+        return this.real; 
     }
     
     public long getLongint() {
-        return 0;
+        return this.longint;
     }
     
     public char getSymbol() {
-        return '2';
+        return this.symbol;
     }
     
     public String getHtml() {
-        return "d";
+        return this.html;
+    }
+    
+    public String[] get() {
+        return new String[] {String.valueOf(this.integer), 
+            String.valueOf(this.real), 
+        String.valueOf(this.longint),
+        String.valueOf(this.symbol),
+        String.valueOf(this.html)};
     }
     
 }
