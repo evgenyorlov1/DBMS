@@ -5,8 +5,8 @@
  */
 package dbms;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 
 /**
@@ -15,17 +15,31 @@ import javax.swing.JFrame;
  */
 public class ViewFrame {   
     
+    public static JFrame mainFrame;
+    public static TablePanel tablePanel;
+    public static TextEntryPanel textEntryPanel;                        
+    
+    
     public static void main (String args[]) {
-        JFrame mainFrame = new JFrame();
+        mainFrame = new JFrame();                
+        tablePanel = new TablePanel();
+        textEntryPanel = new TextEntryPanel();
+        
+        initComponents();               
+    }    
+    
+    public static void initComponents() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setTitle("DataBase");
-        mainFrame.setSize(500, 500);
+        mainFrame.setSize(500, 700);
+        mainFrame.setResizable(false);
         
-        GroupLayout layout = new GroupLayout(mainFrame);
-        mainFrame.setLayout(layout);
+        mainFrame.setLayout(new BorderLayout());
+        mainFrame.add(textEntryPanel, BorderLayout.NORTH);
+        mainFrame.add(tablePanel, BorderLayout.SOUTH);        
+        
         mainFrame.setVisible(true);
-        mainFrame.setBackground(Color.WHITE);
+        mainFrame.setBackground(Color.WHITE); 
+    }
         
-        
-    }    
 }
