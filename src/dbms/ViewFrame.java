@@ -17,13 +17,13 @@ public class ViewFrame {
     
     public static JFrame mainFrame;
     public static TablePanel tablePanel;
-    public static TextEntryPanel textEntryPanel;                        
+    public static TextPanel textEntryPanel;                        
     
     
     public static void main (String args[]) {
         mainFrame = new JFrame();                
         tablePanel = new TablePanel();
-        textEntryPanel = new TextEntryPanel();
+        textEntryPanel = new TextPanel();
         
         initComponents();               
     }    
