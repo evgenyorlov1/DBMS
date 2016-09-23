@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 /**
  *
  * @author pc
- */
+ */ 
 public class ViewFrame {   
     
     public static JFrame mainFrame;

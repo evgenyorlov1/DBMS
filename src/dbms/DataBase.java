@@ -16,6 +16,10 @@ public class DataBase {
     public String name;
     ArrayList<Table> tablesList = new ArrayList<Table>();
     
+    public DataBase(String name) {
+        this.name = name;
+    }
+    
     public void createTable(String DBname) {
         try {
             if(!nameHasDatabase(DBname)) 
@@ -31,11 +35,7 @@ public class DataBase {
                 }   
             }
         } catch(Exception e) {System.out.println("DataBase.dropTable: " + e);}        
-    }
-    
-    public void serialize() {
-        
-    }
+    }        
     
     //here can be iterator
     private boolean nameHasDatabase(String name) {

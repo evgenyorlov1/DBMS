@@ -28,9 +28,9 @@ public class CommandParser {
             return 10;
         } else if(show_tables(line)) {
             return 11;
-        } else if(dropDatabase(line)) {
+        } else if(drop_database(line)) {
             return 12;
-        } else if(createTable(line)) {
+        } else if(create_table(line)) {
             return 13;
         } else if(save(line)) {
             return 14;
@@ -95,14 +95,14 @@ public class CommandParser {
     }
     
     //db.dropDatabase() 
-    private static boolean dropDatabase(String testString) {  
+    private static boolean drop_database(String testString) {  
         Pattern p = Pattern.compile("^db\\.dropDatabase\\(\\)$");  
         Matcher m = p.matcher(testString);         
         return m.matches(); 
     }
     
     //db.createTable(###)
-    private static boolean createTable(String testString) {  
+    private static boolean create_table(String testString) {  
         Pattern p = Pattern.compile("^db\\.createTable\\([a-zA-Z0-9]+\\)$");  
         Matcher m = p.matcher(testString);         
         return m.matches(); 
