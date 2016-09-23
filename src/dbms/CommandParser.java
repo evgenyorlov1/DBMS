@@ -17,32 +17,127 @@ import java.util.regex.*;
 public class CommandParser {         
     
     public static int parse(String line) {
-        try {
-            switch(line) {
-                case "clear": return 0; //clear screen                
-                
-                case "show dbs": return 1; //view all available databases
-                case "use ###": return 2; // FIX: use + db_name/tb_name                
-                
-                case "db": return 10; //check current database
-                case "show tables": return 11; //show all tables in a current database     
-                case "db.dropDatabase()": return 12; //drop current database
-                case "db.createTable(###)": return 13; //create table in a current database                
-                case "db.save()": return 14; //save database
-                
-                case "db.###.drop()": return 101; //drop currnet table in a current database
-                case "db.###.find()": return 102; //view table in a current database
-                
-                case "db.###.find().limit(###)": return 1001; //limit output to ### number
-                case "db.###.find().sort(###)": return 1002; //sort by key
-                case "db.###.find().skip(###)": return 1003; //skpi first ### numbers
-                
-                default: return 999;
-        }
-        } catch(Exception e) {
-            System.out.println("CommandParser.parse: " + e);
-            System.exit(0);
-        }
-        return 999;
+                    
+        if(clear(line)) {
+            return 0;
+        } else if(show_dbs(line)) {
+            return 1;
+        } else if(use(line)) {
+            return 2;
+        } else if(db(line)) {
+            return 10;
+        } else if(show_tables(line)) {
+            return 11;
+        } else if(dropDatabase(line)) {
+            return 12;
+        } else if(createTable(line)) {
+            return 13;
+        } else if(save(line)) {
+            return 14;
+        } else if(drop(line)) {
+            return 101;
+        } else if(find(line)) {
+            return 102;
+        } else if(limit(line)) {
+            return 1001;
+        } else if(sort(line)) {
+            return 1002;
+        } else if(skip(line)) {
+            return 1003;
+        } else {
+            return 999;
+        }        
+    }         
+    
+    //clear 
+    private static boolean clear(String testString) {  
+        Pattern p = Pattern.compile("^clear$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //show dbs 
+    private static boolean show_dbs(String testString) {  
+        Pattern p = Pattern.compile("^show dbs$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //use db_name 
+    private static boolean use(String testString) {  
+        Pattern p = Pattern.compile("^use [a-zA-Z0-9]+$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //db 
+    private static boolean db(String testString) {  
+        Pattern p = Pattern.compile("^db$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //show tables 
+    private static boolean show_tables(String testString) {  
+        Pattern p = Pattern.compile("^show tables$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //db.dropDatabase() 
+    private static boolean dropDatabase(String testString) {  
+        Pattern p = Pattern.compile("^db\\.dropDatabase\\(\\)$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //db.createTable(###)
+    private static boolean createTable(String testString) {  
+        Pattern p = Pattern.compile("^db\\.createTable\\([a-zA-Z0-9]+\\)$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //db.save() 
+    private static boolean save(String testString) {  
+        Pattern p = Pattern.compile("^db\\.save\\(\\)$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //db.###.drop() 
+    private static boolean drop(String testString) {  
+        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.drop\\(\\)$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //db.###.find() 
+    //ADD queries
+    private static boolean find(String testString) {  
+        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //db.###.find().limit(###) 
+    private static boolean limit(String testString) {  
+        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.limit\\([0-9]+\\)$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }    
+        
+    //db.###.find().sort({key:[-1;1]}) 
+    private static boolean sort(String testString) {  
+        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.sort\\(\\{[a-z]+\\:(-1|1)\\}\\)$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
+    }
+    
+    //db.###.find().skip(###) 
+    private static boolean skip(String testString) {  
+        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.skip\\([0-9]+\\)$");  
+        Matcher m = p.matcher(testString);         
+        return m.matches(); 
     }
 }

@@ -65,6 +65,8 @@ public class TextPanel extends javax.swing.JPanel {
                     [currentText.split("\n").length-1];
             
             int command = commandParser.parse(lastLine);
+                        
+            //GET use state
             System.out.println(command);                
             
             switch(command) {
