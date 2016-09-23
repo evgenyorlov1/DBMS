@@ -78,7 +78,23 @@ public class DBMS {
         
     }
     
-    public void find() {
+    public void find(String Tname) {
         
+    }
+    
+    public void limit(int num) {
+        
+    }
+    
+    public void skip(int num) {
+        
+    }
+    
+    public void sort(String key, int order) {
+        
+    }
+    
+    private ArrayList<String[]> view() {
+        return null;
     }
  }
