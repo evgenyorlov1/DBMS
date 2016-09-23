@@ -41,27 +41,7 @@ public class Record  {
             this.html = html;
         } catch(Exception e) {System.out.println("Record.update: " + e);}
     }
-    
-    public int getInteger() {
-        return this.integer;
-    }
-    
-    public float getReal() {
-        return this.real; 
-    }
-    
-    public long getLongint() {
-        return this.longint;
-    }
-    
-    public char getSymbol() {
-        return this.symbol;
-    }
-    
-    public String getHtml() {
-        return this.html;
-    }
-    
+        
     public String[] get() {
         return new String[] {String.valueOf(this.integer), 
             String.valueOf(this.real), 

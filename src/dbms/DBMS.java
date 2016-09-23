@@ -47,12 +47,12 @@ public class DBMS {
         }
     }
     
-    public void drop_table(String DBname) {
+    public void drop_table(String DBname, String Tname) {
         int size = databases.size();
         for(int i=0; i<size; i++) {
             if(databases.get(i).name.equals(DBname)) {
                 for(int j=0; j<databases.get(i).tablesList.size(); j++) {
-                   if(databases.get(i).tablesList.get(j).name.equals(DBname)) {
+                   if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
                        databases.get(i).tablesList.remove(j);
                    }
                 }
@@ -74,27 +74,43 @@ public class DBMS {
         }        
     }
     
+    //TODO
     public void save(String DBname) {
         
     }
     
-    public void find(String Tname) {
-        
+    public ArrayList<String[]> find(String Tname) {
+        return null;
     }
     
-    public void limit(int num) {
-        
+    public ArrayList<String[]> limit(int num) {
+        return null;
     }
     
-    public void skip(int num) {
-        
+    public ArrayList<String[]> skip(int num) {
+        return null;
     }
     
     public void sort(String key, int order) {
-        
+        if(order == 1) {
+            
+        } else if(order == -1) {
+            
+        }
     }
     
-    private ArrayList<String[]> view() {
-        return null;
+    private ArrayList<Record> get_records(String DBname, String Tname) {
+        int size = databases.size();
+        ArrayList<Record> records = new ArrayList<Record>();
+        for(int i=0; i<size; i++) {
+            if(databases.get(i).name.equals(DBname)) {
+                for(int j=0; j<databases.get(i).tablesList.size(); j++) {
+                   if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
+                       records = databases.get(i).tablesList.get(j).recordList;
+                   }
+                }
+            }
+        } 
+        return records;
     }
  }
