@@ -47,7 +47,17 @@ public class CommandParser {
         } else {
             return 999;
         }        
-    }         
+    }    
+    
+    public static String useState(String line) {
+        Pattern p = Pattern.compile("use [a-zA-Z0-9]+$");  
+        Matcher m = p.matcher(line);        
+        if(m.matches()) {
+            return line.substring(4);
+        } else {
+            return "none";
+        }
+    }
     
     //clear 
     private static boolean clear(String testString) {  

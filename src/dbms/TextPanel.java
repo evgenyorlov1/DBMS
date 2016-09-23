@@ -14,14 +14,13 @@ import java.awt.event.KeyEvent;
 public class TextPanel extends javax.swing.JPanel {
 
     
-    private static String use = "None";
-    private static CommandParser commandParser;
+    private static String use = "none";
+    
     /*
      * Creates new form TextEntryPanel
      */
     public TextPanel() {
-        initComponents();
-        commandParser = new CommandParser();
+        initComponents();        
     }
 
     /**
@@ -64,40 +63,52 @@ public class TextPanel extends javax.swing.JPanel {
             String lastLine = currentText.split("\n")
                     [currentText.split("\n").length-1];
             
-            int command = commandParser.parse(lastLine);
-                        
-            //GET use state
-            System.out.println(command);                
+            use = CommandParser.useState(lastLine);
+            int command = CommandParser.parse(lastLine);
+
+            System.out.println(command);                                            
             
             switch(command) {
-                case 0:
+                //clear 
+                case 0:                    
                     jTextPane1.setText(""); //FIX caret on second line                    
                     break;
+                //show dbs 
                 case 1:                    
                     break;
+                //use db_name
                 case 2:
                     break;
-                    
+                //db   
                 case 10:
-                    break;
+                    break;                
+                //show tables 
                 case 11:
                     break;
+                //db.dropDatabase()     
                 case 12:
                     break;
+                //db.createTable(###)
                 case 13:
                     break;
+                //db.save()    
                 case 14:
                     break;
                     
+                //db.###.drop()    
                 case 101:
                     break;
+                //db.###.find()    
                 case 102:
                     break;
                     
+                //db.###.find().limit(###)    
                 case 1001:
                     break;
+                //db.###.find().sort({key:[-1;1]})    
                 case 1002:
                     break;
+                //db.###.find().skip(###)  
                 case 1003:
                     break;
                     

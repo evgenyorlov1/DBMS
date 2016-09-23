@@ -19,7 +19,7 @@ public class Table {
     public Table(String name) {
         this.name = name;        
     }
-          
+    
     public void insert(Record record) {
         recordList.add(record);
     }
@@ -32,5 +32,5 @@ public class Table {
     
     public void update() {}
     
-    public void sortByKey() {}       
+    public void sortByKey(String key) {}       
 }
