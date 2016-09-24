@@ -140,7 +140,7 @@ public class CommandParser {
     //db.###.find().sort({key:[-1;1]}) 
     //key: Integer,Real,Longint,Char are strictly defined
     private static boolean sort(String testString) {  
-        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.sort\\(\\{(Integer|Real|Longint|Char)\\:(-1|1)\\}\\)$");  
+        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.sort\\(\\{(integer|real|longint|char)\\:(-1|1)\\}\\)$");  
         Matcher m = p.matcher(testString);         
         return m.matches(); 
     }
