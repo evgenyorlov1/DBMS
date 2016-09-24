@@ -6,6 +6,8 @@
 package dbms;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -84,6 +86,16 @@ public class DBMS {
         
     }
     
+    //TODO
+    public void register() {
+        
+    }
+    
+    //TODO
+    public void login() {
+        
+    }
+    
     //TESTED
     public ArrayList<String[]> find(String DBname, String Tname) {
         ArrayList<Record> records = get_records(DBname, Tname);
@@ -126,9 +138,9 @@ public class DBMS {
         }
         
         if(order == 1) {
-            return ascending(results, key);
+            return ascending_sort(results, key);
         } else {
-            return descending(results, key);
+            return descending_sort(results, key);
         }
     }
     
@@ -178,14 +190,34 @@ public class DBMS {
         return records;
     }
     
+    //"int","float","long","char"
+    //"Integer","Real","Longint","Char"
     //ascending sort
-    private ArrayList<String[]> ascending(ArrayList<String[]> records, String key) {
-        return null;
+    private ArrayList<String[]> ascending_sort(ArrayList<String[]> records, String key) {
+        Pattern p = Pattern.compile("^(Integer|Real|Longint)$");  
+        Matcher m = p.matcher(key); 
+        
+        if(m.matches()) {
+            for(int i=1; i<records.size(); i++) {
+                
+            }
+        } else {
+            
+        }
+        return records;
     }
     
     //descending sort
-    private ArrayList<String[]> descending(ArrayList<String[]> records, String key) {
+    private ArrayList<String[]> descending_sort(ArrayList<String[]> records, String key) {
+        
+        return records;
+    }     
+    
+    private <T> ArrayList<String[]> insertion_sort(ArrayList<String[]> records, T key) { 
+        for(int i=1; i<records.size(); i++) {
+            
+        }
         return null;
-    }            
+    } 
        
  }
