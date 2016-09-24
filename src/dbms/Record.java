@@ -48,6 +48,5 @@ public class Record  {
         String.valueOf(this.longint),
         String.valueOf(this.symbol),
         String.valueOf(this.html)};
-    }
-    
+    }   
 }
