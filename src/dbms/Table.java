@@ -15,8 +15,9 @@ public class Table {
     
     public String name;
     ArrayList<Record> recordList = new ArrayList<Record>();
+    public static String[] metadata = {"Integer","Real","Longint","Char","HTML"};
     
-    public Table(String name) {
+    public Table(String name) {        
         this.name = name;        
     }        
 }

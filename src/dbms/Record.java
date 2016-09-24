@@ -18,7 +18,6 @@ public class Record  {
     public long longint;
     public char symbol;
     public String html;
-    public static String[] metadata = {"Integer","Real","Longint","Char","HTML"};
     
     // different parametrs can be overloaded via constructor, builder, maps or varargs
     public Record(int integer, float real, long longint, char symbol, String html) {
