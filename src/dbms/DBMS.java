@@ -129,17 +129,17 @@ public class DBMS {
         return results;
     }
     
+    //TESTED
     public ArrayList<String[]> sort(String DBname, String Tname, String key, int order) {
         ArrayList<Record> records = get_records(DBname, Tname);
         ArrayList<String[]> results = new ArrayList<String[]>();
-        
         for(int i=0; i<records.size(); i++) {
             results.add(records.get(i).get());
-        }
-        
+        }        
         if(order == 1) {
             return ascending_sort(results, key);
         } else {
+            System.out.println("desc");
             return descending_sort(results, key);
         }
     }
@@ -189,35 +189,54 @@ public class DBMS {
         
         return records;
     }
-    
-    //"int","float","long","char"
-    //"Integer","Real","Longint","Char"
-    //ascending sort
-    private ArrayList<String[]> ascending_sort(ArrayList<String[]> records, String key) {
-        Pattern p = Pattern.compile("^(Integer|Real|Longint)$");  
-        Matcher m = p.matcher(key); 
         
-        if(m.matches()) {
-            for(int i=1; i<records.size(); i++) {
-                
-            }
-        } else {
-            
+    //TESTED
+    private ArrayList<String[]> ascending_sort(ArrayList<String[]> records, String key) {        
+        if(key.equals("integer")) {            
+            records = insertion_sort_integer(records);
+        } else if(key.equals("real")) {
+            records = insertion_sort_real(records);
+        } else if(key.equals("longint")) {
+            records = insertion_sort_longint(records);
+        } else if(key.equals("char")) {
+            records = insertion_sort_char(records);
         }
         return records;
     }
     
-    //descending sort
     private ArrayList<String[]> descending_sort(ArrayList<String[]> records, String key) {
         
         return records;
-    }     
+    }         
     
-    private <T> ArrayList<String[]> insertion_sort(ArrayList<String[]> records, T key) { 
+    private ArrayList<String[]> insertion_sort_integer(ArrayList<String[]> records) {                  
         for(int i=1; i<records.size(); i++) {
-            
+            int key = Integer.valueOf(records.get(i)[0]);            
+            int j = i - 1;
+            while(j>=0 && Integer.valueOf(records.get(j)[0]) > key) {
+                System.out.println("j: " + j);
+
+                records.get(j+1)[0] = records.get(j)[0];
+                j-=1;
+                records.get(i+1)[0] = String.valueOf(key);
+            }
         }
-        return null;
-    } 
-       
+        return records;
+    }
+    
+    private ArrayList<String[]> insertion_sort_real(ArrayList<String[]> records) {
+                
+        return records;
+    }
+    
+    private ArrayList<String[]> insertion_sort_longint(ArrayList<String[]> records) {
+                
+        return records;
+    }
+    
+    private ArrayList<String[]> insertion_sort_char(ArrayList<String[]> records) {
+                
+        return records;
+    }
+   
  }

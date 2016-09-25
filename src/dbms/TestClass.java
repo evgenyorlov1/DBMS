@@ -21,15 +21,17 @@ public class TestClass {
                
         dbms.create_table("db", "table1");     
         
-        dbms.insert("db", "table1", new Record(1,1,1,'1',"1"));
         dbms.insert("db", "table1", new Record(2,2,2,'2',"2"));
-        dbms.insert("db", "table1", new Record(3,3,3,'3',"3"));
-        dbms.insert("db", "table1", new Record(4,4,4,'4',"4"));
-        dbms.insert("db", "table1", new Record(5,5,5,'5',"5"));
+        dbms.insert("db", "table1", new Record(1,1,1,'1',"1"));
+        dbms.insert("db", "table1", new Record(2,2,2,'2',"2"));        
         dbms.insert("db", "table1", new Record(6,6,6,'6',"6"));
+        dbms.insert("db", "table1", new Record(4,4,4,'4',"4"));
+        dbms.insert("db", "table1", new Record(3,3,3,'3',"3"));
+        dbms.insert("db", "table1", new Record(5,5,5,'5',"5"));
         
         
-        ArrayList<String[]> tbls = dbms.skip("db", "table1", 2);
+        
+        ArrayList<String[]> tbls = dbms.sort("db", "table1", "integer", 1);
         
         for(int i=0; i<tbls.size(); i++) {
             System.out.println(tbls.get(i)[0] + ", " + tbls.get(i)[1] +  ", " + tbls.get(i)[2] +  ", " + tbls.get(i)[3] +  ", " + tbls.get(i)[4]); //+  ", " + tbls.get(i)[5]);

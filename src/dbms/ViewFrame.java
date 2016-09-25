@@ -20,15 +20,15 @@ public class ViewFrame {
     public static TextPanel textEntryPanel;                        
     
     
-    public static void main (String args[]) {
-        mainFrame = new JFrame();                
-        tablePanel = new TablePanel();
-        textEntryPanel = new TextPanel();
-        
+    public static void main (String args[]) {                
         initComponents();               
     }    
     
     public static void initComponents() {
+        mainFrame = new JFrame();                
+        tablePanel = new TablePanel();
+        textEntryPanel = new TextPanel();
+        
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setTitle("DataBase");
         mainFrame.setSize(500, 700);

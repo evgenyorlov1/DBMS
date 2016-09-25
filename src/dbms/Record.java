@@ -49,16 +49,4 @@ public class Record  {
         String.valueOf(this.html)};
     }   
     
-    //TODO
-    public void getKey(String key) {
-        if(key.equals("integer")) {
-            
-        } else if(key.equals("real")) {
-            
-        } else if(key.equals("longint")) {
-            
-        } else if(key.equals("symbol")) {
-            
-        }
-    }
 }
