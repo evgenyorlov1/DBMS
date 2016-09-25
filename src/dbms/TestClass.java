@@ -21,13 +21,13 @@ public class TestClass {
                
         dbms.create_table("db", "table1");     
         
-        dbms.insert("db", "table1", new Record(2,2,2,'2',"2"));
-        dbms.insert("db", "table1", new Record(1,1,1,'1',"1"));
-        dbms.insert("db", "table1", new Record(2,2,2,'2',"2"));        
-        dbms.insert("db", "table1", new Record(6,6,6,'6',"6"));
-        dbms.insert("db", "table1", new Record(4,4,4,'4',"4"));
-        dbms.insert("db", "table1", new Record(3,3,3,'3',"3"));
-        dbms.insert("db", "table1", new Record(5,5,5,'5',"5"));
+        dbms.insert("db", "table1", new Record(62,52,42,'a',"22"));//0
+        dbms.insert("db", "table1", new Record(10,11,12,'1',"13"));//1
+        dbms.insert("db", "table1", new Record(2,2,2,'2',"2"));//2    
+        dbms.insert("db", "table1", new Record(6,6,6,'6',"6"));//3
+        dbms.insert("db", "table1", new Record(4,4,4,'4',"4"));//4
+        dbms.insert("db", "table1", new Record(3,3,3,'3',"3"));//5
+        dbms.insert("db", "table1", new Record(5,5,5,'5',"5"));//6
         
         
         

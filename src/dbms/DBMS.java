@@ -211,11 +211,12 @@ public class DBMS {
     
     private ArrayList<String[]> insertion_sort_integer(ArrayList<String[]> records) {                  
         for(int i=1; i<records.size(); i++) {
-            int key = Integer.valueOf(records.get(i)[0]);            
-            int j = i - 1;
+            int key = Integer.valueOf(records.get(i)[0]);     
+            System.out.println("key: " + key);
+            int j = i - 1;           
             while(j>=0 && Integer.valueOf(records.get(j)[0]) > key) {
                 System.out.println("j: " + j);
-
+                
                 records.get(j+1)[0] = records.get(j)[0];
                 j-=1;
                 records.get(i+1)[0] = String.valueOf(key);
