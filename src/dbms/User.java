@@ -5,11 +5,18 @@
  */
 package dbms;
 
+import java.io.Serializable;
+
 /**
  *
  * @author pc
  */
-public class User {
+public class User implements Serializable{
     public String username;
     public String password;
+    
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

@@ -15,7 +15,7 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
-        initComponents();        
+        initComponents();  
     }
 
     /**
@@ -35,6 +35,7 @@ public class Login extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setText("Username:");
 
@@ -57,6 +58,11 @@ public class Login extends javax.swing.JFrame {
         });
 
         jButton2.setText("Register");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -101,9 +107,19 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    //Login
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        String username = jTextField1.getText();
+        String password = jPasswordField1.getSelectedText();
+        User user = new User(username, password);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    //Register
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

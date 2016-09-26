@@ -29,7 +29,7 @@ public class ViewFrame {
         tablePanel = new TablePanel();
         textEntryPanel = new TextPanel();
         
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         mainFrame.setTitle("DataBase");
         mainFrame.setSize(500, 700);
         mainFrame.setResizable(false);

@@ -6,6 +6,7 @@
 package dbms;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +19,8 @@ public class DBMS {
 
     private ArrayList<User> users = new ArrayList<User>();
     private ArrayList<DataBase> databases = new ArrayList<>();
+    public static final String admin = "admin";
+    public static final String user = "user";
         
     //TESTED
     public ArrayList<String> show_dbs() {        
@@ -86,15 +89,23 @@ public class DBMS {
         
     }
     
-    //TODO
-    public void register() {
-        
+    //TEST
+    public String register(User login) {
+        users.add(login);
+        return user;
     }
     
     //TODO
-    public void login() {
-        
-    }
+    //FIX
+//    public String login(User login) {
+//        if(users.contains(login)) {
+//            for(int i=0; i<users.size(); i++) {
+//                if(users.get(i).username.equals(admin)) {
+//                    return admin;
+//                }
+//            }
+//        }            
+//    }
     
     //TESTED
     public ArrayList<String[]> find(String DBname, String Tname) {
@@ -193,51 +204,113 @@ public class DBMS {
     //TESTED
     private ArrayList<String[]> ascending_sort(ArrayList<String[]> records, String key) {        
         if(key.equals("integer")) {            
-            records = insertion_sort_integer(records);
-        } else if(key.equals("real")) {
-            records = insertion_sort_real(records);
+            records = asc_insertion_sort_integer(records);
+        } else if(key.equals("real")) {            
+            records = asc_insertion_sort_real(records);
         } else if(key.equals("longint")) {
-            records = insertion_sort_longint(records);
+            records = asc_insertion_sort_longint(records);
         } else if(key.equals("char")) {
-            records = insertion_sort_char(records);
+            records = asc_insertion_sort_char(records);
         }
         return records;
     }
     
+    //TESTED
     private ArrayList<String[]> descending_sort(ArrayList<String[]> records, String key) {
-        
+        if(key.equals("integer")) {            
+            records = desc_insertion_sort_integer(records);
+        } else if(key.equals("real")) {            
+            records = desc_insertion_sort_real(records);
+        } else if(key.equals("longint")) {
+            records = desc_insertion_sort_longint(records);
+        } else if(key.equals("char")) {
+            records = desc_insertion_sort_char(records);
+        }
         return records;
     }         
     
-    private ArrayList<String[]> insertion_sort_integer(ArrayList<String[]> records) {                  
-        for(int i=1; i<records.size(); i++) {
-            int key = Integer.valueOf(records.get(i)[0]);     
-            System.out.println("key: " + key);
-            int j = i - 1;           
-            while(j>=0 && Integer.valueOf(records.get(j)[0]) > key) {
-                System.out.println("j: " + j);
-                
-                records.get(j+1)[0] = records.get(j)[0];
-                j-=1;
-                records.get(i+1)[0] = String.valueOf(key);
+    //TESTED
+    private ArrayList<String[]> asc_insertion_sort_integer(ArrayList<String[]> records) {                          
+        for(int i=0; i<records.size(); i++) {                        
+            for(int j=0; j<records.size(); j++) {                                                                 
+                if(Integer.parseInt(records.get(i)[0]) < Integer.parseInt(records.get(j)[0])) {                                        
+                    Collections.swap(records, i, j);
+                }
             }
         }
         return records;
     }
     
-    private ArrayList<String[]> insertion_sort_real(ArrayList<String[]> records) {
+    //TESTED
+    private ArrayList<String[]> asc_insertion_sort_real(ArrayList<String[]> records) {        
+        for(int i=0; i<records.size(); i++) {                        
+            for(int j=0; j<records.size(); j++) {                                                                 
+                if(Float.parseFloat(records.get(i)[1]) < Float.parseFloat(records.get(j)[1])) {                                        
+                    Collections.swap(records, i, j);
+                }
+            }
+        }           
+        return records;
+    }
+    
+    //TESTED
+    private ArrayList<String[]> asc_insertion_sort_longint(ArrayList<String[]> records) {
+          for(int i=0; i<records.size(); i++) {                        
+            for(int j=0; j<records.size(); j++) {                                                                 
+                if(Long.parseLong(records.get(i)[2]) < Long.parseLong(records.get(j)[2])) {                                        
+                    Collections.swap(records, i, j);
+                }
+            }
+        }        
+        return records;
+    }
+    
+    //TODO
+    private ArrayList<String[]> asc_insertion_sort_char(ArrayList<String[]> records) {
                 
         return records;
     }
     
-    private ArrayList<String[]> insertion_sort_longint(ArrayList<String[]> records) {
-                
+    //TESTED
+    private ArrayList<String[]> desc_insertion_sort_integer(ArrayList<String[]> records) {                          
+        for(int i=0; i<records.size(); i++) {                        
+            for(int j=0; j<records.size(); j++) {                                                                 
+                if(Integer.parseInt(records.get(i)[0]) > Integer.parseInt(records.get(j)[0])) {                                        
+                    Collections.swap(records, i, j);
+                }
+            }
+        }
         return records;
     }
     
-    private ArrayList<String[]> insertion_sort_char(ArrayList<String[]> records) {
+    //TESTED
+    private ArrayList<String[]> desc_insertion_sort_real(ArrayList<String[]> records) {        
+        for(int i=0; i<records.size(); i++) {                        
+            for(int j=0; j<records.size(); j++) {                                                                 
+                if(Float.parseFloat(records.get(i)[1]) > Float.parseFloat(records.get(j)[1])) {                                        
+                    Collections.swap(records, i, j);
+                }
+            }
+        }           
+        return records;
+    }
+    
+    //TESTED
+    private ArrayList<String[]> desc_insertion_sort_longint(ArrayList<String[]> records) {
+          for(int i=0; i<records.size(); i++) {                        
+            for(int j=0; j<records.size(); j++) {                                                                 
+                if(Long.parseLong(records.get(i)[2]) > Long.parseLong(records.get(j)[2])) {                                        
+                    Collections.swap(records, i, j);
+                }
+            }
+        }        
+        return records;
+    }
+    
+    //TODO
+    private ArrayList<String[]> desc_insertion_sort_char(ArrayList<String[]> records) {
                 
         return records;
     }
-   
+
  }
