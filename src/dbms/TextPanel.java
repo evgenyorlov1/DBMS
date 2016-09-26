@@ -6,6 +6,7 @@
 package dbms;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,12 +16,14 @@ public class TextPanel extends javax.swing.JPanel {
 
     
     private static String use = "none";
+    private DBMS dbms;
     
     /*
      * Creates new form TextEntryPanel
      */
     public TextPanel() {
-        initComponents();        
+        initComponents();
+        dbms = new DBMS();
     }
 
     /**
@@ -56,7 +59,7 @@ public class TextPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EnterPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_EnterPressed
-        // TODO add your handling code here:
+       
         // TODO get use state
         if((evt.getKeyCode() == KeyEvent.VK_ENTER) && (evt.getID() == KeyEvent.KEY_PRESSED)) {
             String currentText = jTextPane1.getText();
@@ -64,9 +67,7 @@ public class TextPanel extends javax.swing.JPanel {
                     [currentText.split("\n").length-1];
             
             use = CommandParser.useState(lastLine);
-            int command = CommandParser.parse(lastLine);
-
-            System.out.println(command);                                            
+            int command = CommandParser.parse(lastLine);                                            
             
             switch(command) {
                 //clear 
@@ -74,25 +75,40 @@ public class TextPanel extends javax.swing.JPanel {
                     jTextPane1.setText(""); //FIX caret on second line                    
                     break;
                 //show dbs 
-                case 1:                    
+                case 1:                     
+                    ArrayList<String> dbs = dbms.show_dbs();
+                    for(int i=0; i<dbs.size(); i++) {
+                        jTextPane1.setText(dbs.get(i) + "\n");
+                    }                    
                     break;
                 //use db_name
                 case 2:
                     break;
                 //db   
                 case 10:
+                    if(!use.equals("none")) 
+                        jTextPane1.setText(use + "\n");
+                    else 
+                        jTextPane1.setText("select database with use");
                     break;                
                 //show tables 
                 case 11:
+                    ArrayList<String> tables = dbms.show_tables(use);
+                    for(int i=0; i<tables.size(); i++) {
+                        jTextPane1.setText(tables.get(i) + "\n");
+                    }  
                     break;
                 //db.dropDatabase()     
                 case 12:
+                    dbms.drop_database(use);
                     break;
                 //db.createTable(###)
                 case 13:
+                    //dbms.create_table(use, use);
                     break;
                 //db.save()    
                 case 14:
+                    //dbms.save(use);
                     break;
                     
                 //db.###.drop()    
