@@ -13,15 +13,12 @@ import java.util.regex.*;
  * @author pc
  */
 
-//TODO use state
-//Convert to singleton?
 //Refactor pattern methods
 public class CommandParser {  
     
     private static final String none = "none";
        
-    //TEST
-    //Refactor code
+    //TESTED
     public static Object[] parse(String line) {
                     
         if(clear(line)) {             
@@ -233,7 +230,7 @@ public class CommandParser {
             nameMatch.find();
             result[1] = nameMatch.group();
             numberMatch.find();
-            result[2] = numberMatch.group();
+            result[2] = Integer.parseInt(numberMatch.group());
         }
         
         return result; 

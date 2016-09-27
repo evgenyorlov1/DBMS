@@ -119,6 +119,7 @@ public class DBMS {
     
     //TESTED
     public ArrayList<String[]> limit(String DBname, String Tname, int num) {
+        System.out.println("limit DBMS");
         ArrayList<Record> records = get_records(DBname, Tname);
         ArrayList<String[]> results = new ArrayList<String[]>();
         

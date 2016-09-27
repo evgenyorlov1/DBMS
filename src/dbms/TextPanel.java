@@ -59,23 +59,25 @@ public class TextPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EnterPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_EnterPressed
-       
-        // TODO get use state
+              
         if((evt.getKeyCode() == KeyEvent.VK_ENTER) && (evt.getID() == KeyEvent.KEY_PRESSED)) {
             String currentText = jTextPane1.getText();
             String lastLine = currentText.split("\n")
                     [currentText.split("\n").length-1];
-            
+            ArrayList<String[]> results = new ArrayList<>();
+                    
             use = CommandParser.useState(lastLine);
-            int command = CommandParser.parse(lastLine);                                            
+            Object[] command = CommandParser.parse(lastLine);                                            
             
-            switch(command) {
+            switch((int)command[0]) {
                 //clear 
-                case 0:                    
+                case 0:   
+                    System.out.println("clear");
                     jTextPane1.setText(""); //FIX caret on second line                    
                     break;
                 //show dbs 
                 case 1:                     
+                    System.out.println("show dbs");
                     ArrayList<String> dbs = dbms.show_dbs();
                     for(int i=0; i<dbs.size(); i++) {
                         jTextPane1.setText(dbs.get(i) + "\n");
@@ -83,59 +85,83 @@ public class TextPanel extends javax.swing.JPanel {
                     break;
                 //use db_name
                 case 2:
-                    //create_database(String DBname)
-                    //create_table(String DBname, String Tname)
+                    System.out.println("use");
+                    if(!use.equals("none"))
+                        dbms.create_table(use, (String)command[1]);
+                    else
+                        dbms.create_database(use);                    
                     break;
                 //db   
                 case 10:
+                    System.out.println("db");
                     if(!use.equals("none")) 
                         jTextPane1.setText(use + "\n");
                     else 
                         jTextPane1.setText("select database with use");
                     break;                
-                //show tables 
+                //show tables                    
+                //FIX add database logic
                 case 11:
+                    System.out.println("show tables");
                     ArrayList<String> tables = dbms.show_tables(use);
                     for(int i=0; i<tables.size(); i++) {
                         jTextPane1.setText(tables.get(i) + "\n");
                     }  
                     break;
-                //db.dropDatabase()     
+                //db.dropDatabase()
+                //FIX add database logic
                 case 12:
+                    System.out.println("dropDatabase");
                     dbms.drop_database(use);
                     break;
                 //db.createTable(###)
+                //FIX add database logic
                 case 13:
-                    //dbms.create_table(use, use);
+                    System.out.println("createTable");
+                    dbms.create_table(use, (String)command[1]);
                     break;
                 //db.save()    
+                //FIX add database logic
                 case 14:
-                    //dbms.save(use);
-                    break;
-                    
-                //db.###.drop()    
+                    System.out.println("save");
+                    dbms.save(use);
+                    break;                    
+                //db.###.drop() 
+                //FIX add database logic
                 case 101:
-                    //drop_table(String DBname, String Tname)
+                    System.out.println("drop");
+                    dbms.drop_table(use, (String)command[1]);
                     break;
                 //db.###.find()    
+                //FIX add database logic
                 case 102:
-                    //ArrayList<String[]> find(String DBname, String Tname)
-                    break;
-                    
-                //db.###.find().limit(###)    
+                    System.out.println("find");
+                    results.clear();
+                    results = dbms.find(use, (String)command[1]);
+                    break;                    
+                //db.###.find().limit(###)   
+                //FIX String cannot be cast to Integer
                 case 1001:
-                    //ArrayList<String[]> limit(String DBname, String Tname, int num)
+                    System.out.println("limit");
+                    results.clear();                    
+                    results = dbms.limit(use, (String)command[1], (int)command[2]);
                     break;
-                //db.###.find().sort({key:[-1;1]})    
+                //db.###.find().sort({key:[-1;1]}) 
+                //FIX String cannot be cast to Integer
                 case 1002:
-                    //ArrayList<String[]> find(String DBname, String Tname)
+                    System.out.println("sort");
+                    results.clear();
+                    results = dbms.find(use, (String)command[0]);
                     break;
-                //db.###.find().skip(###)  
+                //db.###.find().skip(###)
+                //FIX String cannot be cast to Integer
                 case 1003:
-                    //ArrayList<String[]> skip(String DBname, String Tname, int num)
-                    break;
-                    
-                case 999:                    
+                    System.out.println("skip");
+                    results.clear();
+                    results = dbms.skip(use, (String)command[1], (int)command[2]);
+                    break;                    
+                case 999:                
+                    System.out.println();
                     try {
                         jTextPane1.getDocument().insertString(
                                 jTextPane1.getText().length(), 
