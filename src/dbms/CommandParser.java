@@ -13,39 +13,60 @@ import java.util.regex.*;
  * @author pc
  */
 
-//TODO add regex; use state
-public class CommandParser {         
+//TODO use state
+//Convert to singleton?
+//Refactor pattern methods
+public class CommandParser {  
     
-    public static int parse(String line) {
+    private static final String none = "none";
+       
+    //TEST
+    //Refactor code
+    public static Object[] parse(String line) {
                     
-        if(clear(line)) {
-            return 0;
+        if(clear(line)) {             
+            return new Object[] {0}; //0
         } else if(show_dbs(line)) {
-            return 1;
-        } else if(use(line)) {
-            return 2;
-        } else if(db(line)) {
-            return 10;
+            return new Object[] {1}; //1            
+        } else if((boolean)use(line)[0]) {              
+            Object[] result = use(line);
+            result[0] = 2; //2            
+            return result;
+        } else if(db(line)) {            
+            return new Object[] {10}; //10
         } else if(show_tables(line)) {
-            return 11;
+            return new Object[] {11}; //11
         } else if(drop_database(line)) {
-            return 12;
-        } else if(create_table(line)) {
-            return 13;
+            return new Object[] {12}; //12
+        } else if((boolean)create_table(line)[0]) {            
+            Object[] result = create_table(line);
+            result[0] = 13; //13
+            return result;
         } else if(save(line)) {
-            return 14;
-        } else if(drop(line)) {
-            return 101;
-        } else if(find(line)) {
-            return 102;
-        } else if(limit(line)) {
-            return 1001;
-        } else if(sort(line)) {
-            return 1002;
-        } else if(skip(line)) {
-            return 1003;
-        } else {
-            return 999;
+            return new Object[] {14}; //14  
+        } else if((boolean)drop(line)[0]) {
+            Object[] result = drop(line);
+            result[0] = 101; //101
+            return result;
+        } else if((boolean)find(line)[0]) { 
+            Object[] result = find(line);
+            result[0] = 102; //102
+            return result;
+        } else if((boolean)limit(line)[0]) {
+            Object[] result = limit(line);
+            result[0] = 1001; //1001
+            return result;
+        } else if((boolean)sort(line)[0]) {
+            System.out.println("sort");
+            Object[] result = sort(line);
+            result[0] = 1002; //1002
+            return result;
+        } else if((boolean)skip(line)[0]) {
+            Object[] result = skip(line);
+            result[0] = 1003; //1003
+            return result;
+        } else {                        
+            return new Object[] {999}; //999
         }        
     }    
     
@@ -60,6 +81,7 @@ public class CommandParser {
     }
     
     //clear 
+    //-
     private static boolean clear(String testString) {  
         Pattern p = Pattern.compile("^clear$");  
         Matcher m = p.matcher(testString);         
@@ -67,6 +89,7 @@ public class CommandParser {
     }
     
     //show dbs 
+    //-
     private static boolean show_dbs(String testString) {  
         Pattern p = Pattern.compile("^show dbs$");  
         Matcher m = p.matcher(testString);         
@@ -74,13 +97,28 @@ public class CommandParser {
     }
     
     //use db_name 
-    private static boolean use(String testString) {  
-        Pattern p = Pattern.compile("^use [a-zA-Z0-9]+$");  
-        Matcher m = p.matcher(testString);         
-        return m.matches(); 
+    //table name 
+    //TESTED
+    private static Object[] use(String testString) {  
+        Object[] result = {false, none};       
+        
+        Pattern pattern = Pattern.compile("^use [a-zA-Z0-9]+$");
+        Pattern name = Pattern.compile("(?<=use )(.*)(?=$)");  
+        
+        Matcher patternMatch = pattern.matcher(testString);  
+        Matcher nameMatch = name.matcher(testString);  
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+        }             
+        
+        return result;
     }
     
     //db 
+    //-
     private static boolean db(String testString) {  
         Pattern p = Pattern.compile("^db$");  
         Matcher m = p.matcher(testString);         
@@ -88,6 +126,7 @@ public class CommandParser {
     }
     
     //show tables 
+    //-
     private static boolean show_tables(String testString) {  
         Pattern p = Pattern.compile("^show tables$");  
         Matcher m = p.matcher(testString);         
@@ -95,6 +134,7 @@ public class CommandParser {
     }
     
     //db.dropDatabase() 
+    //-
     private static boolean drop_database(String testString) {  
         Pattern p = Pattern.compile("^db\\.dropDatabase\\(\\)$");  
         Matcher m = p.matcher(testString);         
@@ -102,13 +142,28 @@ public class CommandParser {
     }
     
     //db.createTable(###)
-    private static boolean create_table(String testString) {  
-        Pattern p = Pattern.compile("^db\\.createTable\\([a-zA-Z0-9]+\\)$");  
-        Matcher m = p.matcher(testString);         
-        return m.matches(); 
+    //table name
+    //TESTED
+    private static Object[] create_table(String testString) {  
+        Object[] result = {false, none};
+        
+        Pattern pattern = Pattern.compile("^db\\.createTable\\([a-zA-Z0-9]+\\)$");
+        Pattern name = Pattern.compile("(?<=^db\\.createTable\\()(.*)(?=\\)$)");
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+        }
+        
+        return result; 
     }
     
     //db.save() 
+    //-
     private static boolean save(String testString) {  
         Pattern p = Pattern.compile("^db\\.save\\(\\)$");  
         Matcher m = p.matcher(testString);         
@@ -116,38 +171,131 @@ public class CommandParser {
     }
     
     //db.###.drop() 
-    private static boolean drop(String testString) {  
-        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.drop\\(\\)$");  
-        Matcher m = p.matcher(testString);         
-        return m.matches(); 
+    //table name
+    //TESTED
+    private static Object[] drop(String testString) {  
+        Object[] result = {false, none};
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.drop\\(\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.drop\\(\\)$)");  
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+        }
+        
+        return result; 
     }
     
     //db.###.find() 
     //ADD queries
-    private static boolean find(String testString) {  
-        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)$");  
-        Matcher m = p.matcher(testString);         
-        return m.matches(); 
+    //table name
+    //TESTED
+    private static Object[] find(String testString) {  
+        Object[] result = {false, none};
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.find\\(\\)$)");  
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+        }
+        
+        return result; 
     }
     
     //db.###.find().limit(###) 
-    private static boolean limit(String testString) {  
-        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.limit\\([0-9]+\\)$");  
-        Matcher m = p.matcher(testString);         
-        return m.matches(); 
+    //table name
+    //number
+    //TESTED
+    private static Object[] limit(String testString) {  
+        Object[] result = {false, none, none};
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.limit\\([0-9]+\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.find\\(\\)\\.limit\\()");
+        Pattern number = Pattern.compile("(?<=\\.find\\(\\)\\.limit\\()(.*)(?=\\)$)");
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        Matcher numberMatch = number.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+            numberMatch.find();
+            result[2] = numberMatch.group();
+        }
+        
+        return result; 
     }    
         
     //db.###.find().sort({key:[-1;1]})     
-    private static boolean sort(String testString) {  
-        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.sort\\(\\{(integer|real|longint|char)\\:(-1|1)\\}\\)$");  
-        Matcher m = p.matcher(testString);         
-        return m.matches(); 
+    //table name
+    //key
+    //order int
+    //TESTED
+    private static Object[] sort(String testString) {
+        Object[] result = {false, none, none, none};
+        System.out.println("sort met");
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.sort\\(\\{(integer|real|longint|char)\\:(-1|1)\\}\\)$");
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.find\\(\\)\\.sort\\()");        
+        Pattern key = Pattern.compile("(?<=\\.find\\(\\)\\.sort\\(\\{)(.*)(?=\\:)");        
+        Pattern order = Pattern.compile("(?<=\\.sort\\(\\{(integer|real|longint|char)\\:)(.*)(?=\\}\\)$)");
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        System.out.println(testString);
+        System.out.println(patternMatch.matches());
+        Matcher nameMatch = name.matcher(testString);
+        Matcher keyMatch = key.matcher(testString);
+        Matcher orderMatch = order.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+            keyMatch.find();
+            result[2] = keyMatch.group();
+            orderMatch.find();
+            result[3] = orderMatch.group();
+        }
+        
+        return result; 
     }
     
     //db.###.find().skip(###) 
-    private static boolean skip(String testString) {  
-        Pattern p = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.skip\\([0-9]+\\)$");  
-        Matcher m = p.matcher(testString);         
-        return m.matches(); 
-    }
+    //table name
+    //number int
+    //TESTED
+    private static Object[] skip(String testString) {
+        Object[] result = {false, none, none};
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.skip\\([0-9]+\\)$"); 
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.find\\(\\)\\.)");
+        Pattern number = Pattern.compile("(?<=\\.find\\(\\)\\.skip\\()(.*)(?=\\)$)");
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        Matcher numberMatch = number.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+            numberMatch.find();
+            result[2] = numberMatch.group();
+        }
+        
+        return result; 
+    }        
 }

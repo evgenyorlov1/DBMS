@@ -83,6 +83,8 @@ public class TextPanel extends javax.swing.JPanel {
                     break;
                 //use db_name
                 case 2:
+                    //create_database(String DBname)
+                    //create_table(String DBname, String Tname)
                     break;
                 //db   
                 case 10:
@@ -113,19 +115,24 @@ public class TextPanel extends javax.swing.JPanel {
                     
                 //db.###.drop()    
                 case 101:
+                    //drop_table(String DBname, String Tname)
                     break;
                 //db.###.find()    
                 case 102:
+                    //ArrayList<String[]> find(String DBname, String Tname)
                     break;
                     
                 //db.###.find().limit(###)    
                 case 1001:
+                    //ArrayList<String[]> limit(String DBname, String Tname, int num)
                     break;
                 //db.###.find().sort({key:[-1;1]})    
                 case 1002:
+                    //ArrayList<String[]> find(String DBname, String Tname)
                     break;
                 //db.###.find().skip(###)  
                 case 1003:
+                    //ArrayList<String[]> skip(String DBname, String Tname, int num)
                     break;
                     
                 case 999:                    
