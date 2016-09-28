@@ -114,24 +114,27 @@ public class DBMS {
         for(int i=0; i<records.size(); i++) {
             results.add(records.get(i).get());
         }        
+        
         return results;
     }
     
     //TESTED
     public ArrayList<String[]> limit(String DBname, String Tname, int num) {
-        System.out.println("limit DBMS");
         ArrayList<Record> records = get_records(DBname, Tname);
         ArrayList<String[]> results = new ArrayList<String[]>();
         
-        for(int i=0; i<num; i++) {
+        int i=0;
+        while(i<num && i<records.size()) {
             results.add(records.get(i).get());
-        }        
+            i++;
+        }
+              
         return results;
     }
-    
+            
     //TESTED
     public ArrayList<String[]> skip(String DBname, String Tname, int num) {
-        ArrayList<Record> records = get_records(DBname, Tname);
+        ArrayList<Record> records = get_records(DBname, Tname);        
         ArrayList<String[]> results = new ArrayList<String[]>();
         
         for(int i=num; i<records.size(); i++) {
@@ -142,6 +145,7 @@ public class DBMS {
     
     //TESTED
     public ArrayList<String[]> sort(String DBname, String Tname, String key, int order) {
+        System.out.println("DBMS.sort");
         ArrayList<Record> records = get_records(DBname, Tname);
         ArrayList<String[]> results = new ArrayList<String[]>();
         for(int i=0; i<records.size(); i++) {

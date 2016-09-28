@@ -83,7 +83,7 @@ public class TestClass {
 //        Object[] dropO = CommandParser.parse(drop);System.out.println(dropO[1]);
 //        Object[] findO = CommandParser.parse(find);System.out.println(findO[1]);
 //        Object[] limitO = CommandParser.parse(limit);System.out.println(limitO[2]);
-        Object[] sortO = CommandParser.parse(sort);System.out.println(sortO[2]);
+        Object[] sortO = QuaeryProcessor.parse(sort);System.out.println(sortO[2]);
 //        Object[] skipO = CommandParser.parse(skip);System.out.println(skipO[2]);
         
         

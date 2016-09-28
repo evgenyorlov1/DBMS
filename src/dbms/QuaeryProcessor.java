@@ -14,7 +14,7 @@ import java.util.regex.*;
  */
 
 //Refactor pattern methods
-public class CommandParser {  
+public class QuaeryProcessor {  
     
     private static final String none = "none";
        
@@ -53,13 +53,13 @@ public class CommandParser {
             Object[] result = limit(line);
             result[0] = 1001; //1001
             return result;
-        } else if((boolean)sort(line)[0]) {
-            System.out.println("sort");
+        } else if((boolean)sort(line)[0]) {            
             Object[] result = sort(line);
             result[0] = 1002; //1002
             return result;
         } else if((boolean)skip(line)[0]) {
             Object[] result = skip(line);
+            System.out.println("QuaeryProcessor.skip");
             result[0] = 1003; //1003
             return result;
         } else {                        
@@ -67,6 +67,7 @@ public class CommandParser {
         }        
     }    
     
+    //TESTE
     public static String useState(String line) {
         Pattern p = Pattern.compile("use [a-zA-Z0-9]+$");  
         Matcher m = p.matcher(line);        
@@ -77,7 +78,7 @@ public class CommandParser {
         }
     }
     
-    //clear 
+    //clear
     //-
     private static boolean clear(String testString) {  
         Pattern p = Pattern.compile("^clear$");  
@@ -243,16 +244,13 @@ public class CommandParser {
     //TESTED
     private static Object[] sort(String testString) {
         Object[] result = {false, none, none, none};
-        System.out.println("sort met");
         
         Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.sort\\(\\{(integer|real|longint|char)\\:(-1|1)\\}\\)$");
         Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.find\\(\\)\\.sort\\()");        
         Pattern key = Pattern.compile("(?<=\\.find\\(\\)\\.sort\\(\\{)(.*)(?=\\:)");        
         Pattern order = Pattern.compile("(?<=\\.sort\\(\\{(integer|real|longint|char)\\:)(.*)(?=\\}\\)$)");
         
-        Matcher patternMatch = pattern.matcher(testString);
-        System.out.println(testString);
-        System.out.println(patternMatch.matches());
+        Matcher patternMatch = pattern.matcher(testString);        
         Matcher nameMatch = name.matcher(testString);
         Matcher keyMatch = key.matcher(testString);
         Matcher orderMatch = order.matcher(testString);
@@ -264,7 +262,7 @@ public class CommandParser {
             keyMatch.find();
             result[2] = keyMatch.group();
             orderMatch.find();
-            result[3] = orderMatch.group();
+            result[3] = Integer.parseInt(orderMatch.group());
         }
         
         return result; 
@@ -290,7 +288,7 @@ public class CommandParser {
             nameMatch.find();
             result[1] = nameMatch.group();
             numberMatch.find();
-            result[2] = numberMatch.group();
+            result[2] = Integer.parseInt(numberMatch.group());
         }
         
         return result; 

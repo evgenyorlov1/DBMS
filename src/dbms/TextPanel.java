@@ -66,8 +66,8 @@ public class TextPanel extends javax.swing.JPanel {
                     [currentText.split("\n").length-1];
             ArrayList<String[]> results = new ArrayList<>();
                     
-            use = CommandParser.useState(lastLine);
-            Object[] command = CommandParser.parse(lastLine);                                            
+            use = QuaeryProcessor.useState(lastLine);
+            Object[] command = QuaeryProcessor.parse(lastLine);                                            
             
             switch((int)command[0]) {
                 //clear 
@@ -99,69 +99,139 @@ public class TextPanel extends javax.swing.JPanel {
                     else 
                         jTextPane1.setText("select database with use");
                     break;                
-                //show tables                    
-                //FIX add database logic
+                //show tables                                  
                 case 11:
                     System.out.println("show tables");
-                    ArrayList<String> tables = dbms.show_tables(use);
-                    for(int i=0; i<tables.size(); i++) {
-                        jTextPane1.setText(tables.get(i) + "\n");
-                    }  
+                    if(!use.equals("none")) {
+                        ArrayList<String> tables = dbms.show_tables(use);
+                        for(int i=0; i<tables.size(); i++) {
+                            jTextPane1.setText(tables.get(i) + "\n");
+                        }  
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }
                     break;
-                //db.dropDatabase()
-                //FIX add database logic
+                //db.dropDatabase()                
                 case 12:
                     System.out.println("dropDatabase");
-                    dbms.drop_database(use);
+                    if(!use.equals("none")) {
+                        dbms.drop_database(use);
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }                    
                     break;
-                //db.createTable(###)
-                //FIX add database logic
+                //db.createTable(###)                
                 case 13:
                     System.out.println("createTable");
-                    dbms.create_table(use, (String)command[1]);
+                    if(!use.equals("none")) {
+                        dbms.create_table(use, (String)command[1]);
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }                            
                     break;
                 //db.save()    
-                //FIX add database logic
                 case 14:
                     System.out.println("save");
-                    dbms.save(use);
+                    if(!use.equals("none")) {
+                        dbms.save(use);
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }        
                     break;                    
-                //db.###.drop() 
-                //FIX add database logic
+                //db.###.drop()                 
                 case 101:
                     System.out.println("drop");
-                    dbms.drop_table(use, (String)command[1]);
+                    if(!use.equals("none")) {
+                        dbms.drop_table(use, (String)command[1]);
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }                            
                     break;
                 //db.###.find()    
-                //FIX add database logic
                 case 102:
                     System.out.println("find");
-                    results.clear();
-                    results = dbms.find(use, (String)command[1]);
+                    if(!use.equals("none")) {
+                        results.clear();
+                        results = dbms.find(use, (String)command[1]);
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }                           
                     break;                    
-                //db.###.find().limit(###)   
-                //FIX String cannot be cast to Integer
+                //db.###.find().limit(###)                   
                 case 1001:
                     System.out.println("limit");
-                    results.clear();                    
-                    results = dbms.limit(use, (String)command[1], (int)command[2]);
+                    if(!use.equals("none")) {
+                        results.clear();                    
+                        results = dbms.limit(use, (String)command[1], (int)command[2]);
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }                    
                     break;
-                //db.###.find().sort({key:[-1;1]}) 
-                //FIX String cannot be cast to Integer
+                //db.###.find().sort({key:[-1;1]})                 
                 case 1002:
-                    System.out.println("sort");
-                    results.clear();
-                    results = dbms.find(use, (String)command[0]);
+                    System.out.println("TextPanel.sort");
+                    if(!use.equals("none")) {
+                        results.clear();                    
+                        results = dbms.sort(use, (String)command[1], (String)command[2], (int)command[3]);
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }                                 
                     break;
-                //db.###.find().skip(###)
-                //FIX String cannot be cast to Integer
-                case 1003:
-                    System.out.println("skip");
-                    results.clear();
-                    results = dbms.skip(use, (String)command[1], (int)command[2]);
+                //db.###.find().skip(###)                
+                case 1003:       
+                    if(!use.equals("none")) {
+                        results.clear();
+                        results = dbms.skip(use, (String)command[1], (int)command[2]);
+                    } else {
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(lastLine.concat(" - select database")), 
+                                    null);                        
+                        } catch(Exception e) {}
+                    }                          
                     break;                    
                 case 999:                
-                    System.out.println();
                     try {
                         jTextPane1.getDocument().insertString(
                                 jTextPane1.getText().length(), 
