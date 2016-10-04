@@ -19,6 +19,10 @@ public class QuaeryProcessor {
     private static final String none = "none";
        
     //TESTED
+    //[0] - command code
+    //[1] - table name
+    //[2] - key
+    //[3] - order
     public static Object[] parse(String line) {
                     
         if(clear(line)) {             
@@ -68,13 +72,13 @@ public class QuaeryProcessor {
     }    
     
     //TESTE
-    public static String useState(String line) {
+    public static String useState(String line, String use) {
         Pattern p = Pattern.compile("use [a-zA-Z0-9]+$");  
         Matcher m = p.matcher(line);        
         if(m.matches()) {
             return line.substring(4);
         } else {
-            return "none";
+            return use;
         }
     }
     

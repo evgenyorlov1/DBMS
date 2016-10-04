@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class TextPanel extends javax.swing.JPanel {
 
     
-    private static String use = "none";
+    private static String useState = "none";
     private DBMS dbms;
     
     /*
@@ -66,46 +66,67 @@ public class TextPanel extends javax.swing.JPanel {
                     [currentText.split("\n").length-1];
             ArrayList<String[]> results = new ArrayList<>();
                     
-            use = QuaeryProcessor.useState(lastLine);
+            System.out.println("before use: " + useState);
+            useState = QuaeryProcessor.useState(lastLine, useState);
+            System.out.println("after use: " + useState);
             Object[] command = QuaeryProcessor.parse(lastLine);                                            
             
+            //FIX use state issue            
+            //REFACTOR create function for jTextPane.setText()
             switch((int)command[0]) {
-                //clear 
+                //clear  TESTED
                 case 0:   
-                    System.out.println("clear");
+                    System.out.println("\nclear");
                     jTextPane1.setText(""); //FIX caret on second line                    
                     break;
-                //show dbs 
-                case 1:                     
-                    System.out.println("show dbs");
-                    ArrayList<String> dbs = dbms.show_dbs();
+                    
+                //show dbs TESTED
+                case 1:
+                    System.out.println("\nshow dbs");
+                    ArrayList<String> dbs = dbms.show_dbs();                    
                     for(int i=0; i<dbs.size(); i++) {
-                        jTextPane1.setText(dbs.get(i) + "\n");
-                    }                    
+                        System.out.println(dbs.get(i));
+                        try {
+                            jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(dbs.get(i)), 
+                                    null); 
+                        } catch(Exception e) {}
+                    }
                     break;
-                //use db_name
+                    
+                //use db_name    TESTED             
                 case 2:
-                    System.out.println("use");
-                    if(!use.equals("none"))
-                        dbms.create_table(use, (String)command[1]);
-                    else
-                        dbms.create_database(use);                    
+                    System.out.println("\nuse");
+                    System.out.println(useState);
+                    if(dbms.is_unique_name(useState)) {
+                        System.out.println("TextPanel.create_database"); //have command that creates table
+                        dbms.create_database(useState);
+                    } else {
+                        System.out.println("TextPanel.select_database");
+                        //dbms.create_database(useState);                    
+                    }
                     break;
-                //db   
+                //db - show current database TESTED
                 case 10:
-                    System.out.println("db");
-                    if(!use.equals("none")) 
-                        jTextPane1.setText(use + "\n");
+                    System.out.println("\ndb");
+                    if(!useState.equals("none")) 
+                        jTextPane1.setText(useState + "\n");
                     else 
                         jTextPane1.setText("select database with use");
-                    break;                
-                //show tables                                  
+                    break;
+                //show tables TESTED
                 case 11:
-                    System.out.println("show tables");
-                    if(!use.equals("none")) {
-                        ArrayList<String> tables = dbms.show_tables(use);
+                    System.out.println("\nshow tables");
+                    if(!useState.equals("none")) {
+                        ArrayList<String> tables = dbms.show_tables(useState);
                         for(int i=0; i<tables.size(); i++) {
-                            jTextPane1.setText(tables.get(i) + "\n");
+                            try {
+                                jTextPane1.getDocument().insertString(
+                                    jTextPane1.getText().length(), 
+                                    "\n".concat(tables.get(i)), 
+                                    null); 
+                            } catch(Exception e) {}                            
                         }  
                     } else {
                         try {
@@ -116,11 +137,11 @@ public class TextPanel extends javax.swing.JPanel {
                         } catch(Exception e) {}
                     }
                     break;
-                //db.dropDatabase()                
+                //db.dropDatabase() TESTED               
                 case 12:
-                    System.out.println("dropDatabase");
-                    if(!use.equals("none")) {
-                        dbms.drop_database(use);
+                    System.out.println("\ndropDatabase");
+                    if(!useState.equals("none")) {
+                        dbms.drop_database(useState);
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(
@@ -130,11 +151,11 @@ public class TextPanel extends javax.swing.JPanel {
                         } catch(Exception e) {}
                     }                    
                     break;
-                //db.createTable(###)                
+                //db.createTable(###)  TESTED            
                 case 13:
-                    System.out.println("createTable");
-                    if(!use.equals("none")) {
-                        dbms.create_table(use, (String)command[1]);
+                    System.out.println("\ncreateTable");
+                    if(!useState.equals("none")) {
+                        dbms.create_table(useState, (String)command[1]);
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(
@@ -146,9 +167,9 @@ public class TextPanel extends javax.swing.JPanel {
                     break;
                 //db.save()    
                 case 14:
-                    System.out.println("save");
-                    if(!use.equals("none")) {
-                        dbms.save(use);
+                    System.out.println("\nsave");
+                    if(!useState.equals("none")) {
+                        dbms.save(useState);
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(
@@ -158,11 +179,11 @@ public class TextPanel extends javax.swing.JPanel {
                         } catch(Exception e) {}
                     }        
                     break;                    
-                //db.###.drop()                 
+                //db.###.drop()      TESTED            
                 case 101:
-                    System.out.println("drop");
-                    if(!use.equals("none")) {
-                        dbms.drop_table(use, (String)command[1]);
+                    System.out.println("\ndrop");
+                    if(!useState.equals("none")) {
+                        dbms.drop_table(useState, (String)command[1]);
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(
@@ -174,10 +195,10 @@ public class TextPanel extends javax.swing.JPanel {
                     break;
                 //db.###.find()    
                 case 102:
-                    System.out.println("find");
-                    if(!use.equals("none")) {
+                    System.out.println("\nfind");
+                    if(!useState.equals("none")) {
                         results.clear();
-                        results = dbms.find(use, (String)command[1]);
+                        results = dbms.find(useState, (String)command[1]);
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(
@@ -189,10 +210,10 @@ public class TextPanel extends javax.swing.JPanel {
                     break;                    
                 //db.###.find().limit(###)                   
                 case 1001:
-                    System.out.println("limit");
-                    if(!use.equals("none")) {
+                    System.out.println("\nlimit");
+                    if(!useState.equals("none")) {
                         results.clear();                    
-                        results = dbms.limit(use, (String)command[1], (int)command[2]);
+                        results = dbms.limit(useState, (String)command[1], (int)command[2]);
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(
@@ -204,10 +225,10 @@ public class TextPanel extends javax.swing.JPanel {
                     break;
                 //db.###.find().sort({key:[-1;1]})                 
                 case 1002:
-                    System.out.println("TextPanel.sort");
-                    if(!use.equals("none")) {
+                    System.out.println("\nTextPanel.sort");
+                    if(!useState.equals("none")) {
                         results.clear();                    
-                        results = dbms.sort(use, (String)command[1], (String)command[2], (int)command[3]);
+                        results = dbms.sort(useState, (String)command[1], (String)command[2], (int)command[3]);
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(
@@ -219,9 +240,9 @@ public class TextPanel extends javax.swing.JPanel {
                     break;
                 //db.###.find().skip(###)                
                 case 1003:       
-                    if(!use.equals("none")) {
+                    if(!useState.equals("none")) {
                         results.clear();
-                        results = dbms.skip(use, (String)command[1], (int)command[2]);
+                        results = dbms.skip(useState, (String)command[1], (int)command[2]);
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(

@@ -2,3 +2,7 @@ Look at Variant pattern for schemeless tabels
 Add schemes to db
 Add null value
 Add output to table or to terminal
+
+Issue with command parsers
+
+FIX useState after dropDatabase()

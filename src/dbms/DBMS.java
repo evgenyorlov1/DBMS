@@ -22,7 +22,7 @@ public class DBMS {
         
     //TESTED
     public ArrayList<String> show_dbs() {        
-        ArrayList<String> databaseNames = new ArrayList<String>();
+        ArrayList<String> databaseNames = new ArrayList<String>();        
         
         for(int i=0; i<databases.size(); i++) {
             databaseNames.add(databases.get(i).name);
@@ -73,7 +73,8 @@ public class DBMS {
     }
     
     //TESTED, add name unique test
-    public void create_table(String DBname, String Tname) {                
+    public void create_table(String DBname, String Tname) {   
+        System.out.println("DBMS.create_table");
         for(int i=0; i<databases.size(); i++) {
             if(databases.get(i).name.equals(DBname)) {
                 //System.out.println("create_table: " + Tname);
@@ -183,6 +184,15 @@ public class DBMS {
                 }                
             }
         }
+    }
+    
+    //TEST
+    public boolean is_unique_name(String useState) {
+        for(int i=0; i<databases.size(); i++) {
+            if(databases.get(i).name.equals(useState))
+                return false;
+        }
+        return true;
     }
     
     //TESTED
