@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
 public class TestClass {
         
     public static void main(String args[]) {
-        DBMS dbms = new DBMS();
+        SingletonDBMS dbms = SingletonDBMS.getInstance();
+        //DBMS dbms = new DBMS();
         dbms.create_database("db");   
         compar();
         //reg();

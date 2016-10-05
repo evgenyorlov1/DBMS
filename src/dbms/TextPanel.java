@@ -188,6 +188,7 @@ public class TextPanel extends javax.swing.JPanel {
         }   
     }
     
+    //TODO
     private void save(String lastLine) throws Exception{
         System.out.println("\nsave");
         if(!useState.equals(this.none)) {
@@ -198,6 +199,7 @@ public class TextPanel extends javax.swing.JPanel {
         }    
     }
     
+    //TODO
     private void drop(Object[] command, String lastLine) throws Exception{
         System.out.println("\ndrop");
         if(!useState.equals(this.none)) {
@@ -208,6 +210,7 @@ public class TextPanel extends javax.swing.JPanel {
         }      
     }
     
+    //TODO
     private void find(Object[] command, String lastLine) throws Exception {
         System.out.println("\nfind");
         ArrayList<String[]> results = new ArrayList<>();
@@ -219,6 +222,7 @@ public class TextPanel extends javax.swing.JPanel {
         }       
     }
     
+    //TODO
     private void limit(Object[] command, String lastLine) throws Exception {
         System.out.println("\nlimit");
         ArrayList<String[]> results = new ArrayList<>();
@@ -230,6 +234,7 @@ public class TextPanel extends javax.swing.JPanel {
         }     
     }
     
+    //TODO
     private void sort(Object[] command, String lastLine) throws Exception{
         System.out.println("\nTextPanel.sort");
         ArrayList<String[]> results = new ArrayList<>();
@@ -241,6 +246,7 @@ public class TextPanel extends javax.swing.JPanel {
         }     
     }
     
+    //TODO
     private void skip(Object[] command, String lastLine) throws Exception{
         ArrayList<String[]> results = new ArrayList<>();
         if(!useState.equals(this.none)) {            

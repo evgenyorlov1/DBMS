@@ -1,8 +1,17 @@
 Look at Variant pattern for schemeless tabels 
-Add schemes to db
 Add null value
 Add output to table or to terminal
+Add Login(user, admin)
+insert value
+save db
+save tb
 
-Issue with command parsers
+Add db.tb.save()
+Add db.tb.find().save().
+Add db.tb.find().skip().
+                .limit().
+                .sort().
+                       save()
 
-FIX useState after dropDatabase()
+
+Change to chemeless table

@@ -193,6 +193,11 @@ public class QuaeryProcessor {
         return result; 
     }
     
+    //db.###.insert({key: value})
+    private static void insert() {
+        
+    }
+    
     //db.###.find() 
     //ADD queries
     //table name
