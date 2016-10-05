@@ -7,6 +7,7 @@ package dbms;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import static java.lang.System.out;
 
 /**
  *
@@ -17,6 +18,7 @@ public class TextPanel extends javax.swing.JPanel {
     
     private static String useState = "none";
     private DBMS dbms;
+    private static final String none = "none";
     
     /*
      * Creates new form TextEntryPanel
@@ -106,7 +108,7 @@ public class TextPanel extends javax.swing.JPanel {
                         System.out.println("TextPanel.select_database");
                         //dbms.create_database(useState);                    
                     }
-                    break;
+                    break;                   
                 //db - show current database TESTED
                 case 10:
                     System.out.println("\ndb");
@@ -140,8 +142,9 @@ public class TextPanel extends javax.swing.JPanel {
                 //db.dropDatabase() TESTED               
                 case 12:
                     System.out.println("\ndropDatabase");
-                    if(!useState.equals("none")) {
+                    if(!useState.equals(this.none)) {
                         dbms.drop_database(useState);
+                        useState = this.none;
                     } else {
                         try {
                             jTextPane1.getDocument().insertString(
