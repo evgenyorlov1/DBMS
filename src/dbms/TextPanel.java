@@ -17,7 +17,7 @@ public class TextPanel extends javax.swing.JPanel {
 
     
     private static String useState = "none";
-    private DBMS dbms;
+    private SingletonDBMS dbms;
     private static final String none = "none";
     
     /*
@@ -25,7 +25,7 @@ public class TextPanel extends javax.swing.JPanel {
      */
     public TextPanel() {
         initComponents();
-        dbms = new DBMS();
+        dbms = SingletonDBMS.getInstance();
     }
 
     /**

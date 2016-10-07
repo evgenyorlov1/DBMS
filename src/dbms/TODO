@@ -15,3 +15,5 @@ Add db.tb.find().skip().
 
 
 Change to chemeless table
+
+TEST SingletonDBMS.java
