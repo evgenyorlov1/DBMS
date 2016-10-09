@@ -1,5 +1,6 @@
 Look at Variant pattern for schemeless tabels 
 Add null value
+
 Add output to table or to terminal
 Add Login(user, admin)
 insert value
@@ -15,5 +16,5 @@ Add db.tb.find().skip().
 
 
 Change to chemeless table
-
-TEST SingletonDBMS.java
+ADD save destination
+ADD choose where to save

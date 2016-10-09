@@ -5,6 +5,8 @@
  */
 package dbms;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -93,8 +95,42 @@ public class SingletonDBMS {
     }
     
     //TODO
-    public void save(String DBname) {
+    public void save(String DBname, String fileName) {
+        String json = "";
+        JSONGenerator generator = new JSONGenerator();
+        for(DataBase db : databases) {
+            if(db.name.equals(DBname))
+                json = generator.database_to_json(db);
+        }
         
+        try {
+            File file = new File(fileName);
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(json);            
+            fileWriter.flush();
+            fileWriter.close();
+        } catch(Exception e) {}
+    }
+    
+    //TODO
+    public void save(String DBname, String Tname, String fileName) {
+        String json = "";
+        JSONGenerator generator = new JSONGenerator();
+        for(DataBase db : databases) {
+            if(db.name.equals(DBname))
+                for(Table tb : db.tablesList) {
+                    if(tb.name.equals(Tname))
+                        json = generator.table_to_json(tb);
+                }
+        }
+        
+        try {
+            File file = new File(fileName);
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(json);            
+            fileWriter.flush();
+            fileWriter.close();
+        } catch(Exception e) {}
     }
     
     //TEST

@@ -43,8 +43,11 @@ public class QuaeryProcessor {
             Object[] result = create_table(line);
             result[0] = 13; //13
             return result;
-        } else if(save(line)) {
-            return new Object[] {14}; //14  
+        } else if((boolean)save(line)[0]) {
+            Object[] result = save(line);
+            result[0] = 14; //14
+            System.out.println("QP switch: "+result[1]);
+            return result; //14  
         } else if((boolean)drop(line)[0]) {
             Object[] result = drop(line);
             result[0] = 101; //101
@@ -53,6 +56,10 @@ public class QuaeryProcessor {
             Object[] result = find(line);
             result[0] = 102; //102
             return result;
+        } else if((boolean)save_table(line)[0]) {
+            Object[] result = save_table(line);
+            result[0] = 103; //103
+            return result;            
         } else if((boolean)limit(line)[0]) {
             Object[] result = limit(line);
             result[0] = 1001; //1001
@@ -166,10 +173,45 @@ public class QuaeryProcessor {
     
     //db.save() 
     //-
-    private static boolean save(String testString) {  
-        Pattern p = Pattern.compile("^db\\.save\\(\\)$");  
-        Matcher m = p.matcher(testString);         
-        return m.matches(); 
+    private static Object[] save(String testString) {  
+        Object[] result = {false, none};
+        Pattern pattern = Pattern.compile("^db\\.save\\([a-zA-Z]+\\)$");          
+        Pattern file = Pattern.compile("(?<=save\\()(.*)(?=\\)$)");
+        
+        Matcher patternMatch = pattern.matcher(testString);         
+        Matcher fileMatch = file.matcher(testString); 
+
+        if(patternMatch.matches()) {
+            result[0] = true;
+            fileMatch.find();
+            result[1] = fileMatch.group();            
+            System.out.println("group:" + fileMatch.group());
+        }              
+        System.out.println("file:" + result[1]);
+        return result; 
+    }
+    
+    private static Object[] save_table(String testString) { 
+        System.out.println("save_table");
+        Object[] result = {false, none, none};
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.save\\([a-zA-Z]+\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.save\\([a-zA-Z]+\\)$)");  
+        Pattern file = Pattern.compile("(?<=save\\()(.*)(?=\\)$)");
+        
+        Matcher patternMatch = pattern.matcher(testString);         
+        Matcher nameMatch = name.matcher(testString);   
+        Matcher fileMatch = file.matcher(testString); 
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+            fileMatch.find();
+            result[2] = fileMatch.group();
+        }
+        
+        return result; 
     }
     
     //db.###.drop() 

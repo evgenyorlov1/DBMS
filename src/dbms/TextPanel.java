@@ -93,14 +93,17 @@ public class TextPanel extends javax.swing.JPanel {
                     try {createTable(command, lastLine);} catch(Exception e) {}                                            
                     break;    
                 case 14:
-                    try {save(lastLine);} catch(Exception e) {}
+                    try {save(command, lastLine);} catch(Exception e) {}
                     break;                                    
                 case 101:
                     try {drop(command, lastLine);} catch(Exception e) {}              
                     break;                
                 case 102:                    
                     try {find(command, lastLine);} catch(Exception e) {}                                                      
-                    break;                                    
+                    break;    
+                case 103:
+                    try {save_table(command, lastLine);} catch(Exception e) {} 
+                    break;
                 case 1001:
                     try {limit(command, lastLine);} catch(Exception e) {}              
                     break;                
@@ -187,12 +190,22 @@ public class TextPanel extends javax.swing.JPanel {
                 "\n".concat(lastLine.concat(" - select database")), null);                                    
         }   
     }
-    
-    //TODO
-    private void save(String lastLine) throws Exception{
+        
+    private void save(Object[] command, String lastLine) throws Exception{
         System.out.println("\nsave");
+        System.out.println("table save: "+(String)command[1]);
         if(!useState.equals(this.none)) {
-            dbms.save(useState);
+            dbms.save(useState, (String)command[1]);
+        } else {
+            jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
+                "\n".concat(lastLine.concat(" - select database")), null);                                    
+        }    
+    }
+    
+    private void save_table(Object[] command, String lastLine) throws Exception{
+        System.out.println("\nsave_database");
+        if(!useState.equals(this.none)) {
+            dbms.save(useState, (String)command[1], (String)command[2]);
         } else {
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                    

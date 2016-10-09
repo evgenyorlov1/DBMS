@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Table {
     
-    public String name;
+    public final String name;
     ArrayList<Record> recordList = new ArrayList<Record>();
     public static String[] metadata = {"Integer","Real","Longint","Char","HTML"};
     
