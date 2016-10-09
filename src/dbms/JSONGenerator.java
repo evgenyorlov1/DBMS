@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 package dbms;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.parser.*;
 
 /**
  *
@@ -35,10 +38,58 @@ public class JSONGenerator {
     
     //TODO
     public DataBase json_to_database(String json) {
+        JSONParser parser = new JSONParser();        
+        try {
+            Object obj = parser.parse(json);            
+            JSONObject jsonObj = (JSONObject) obj;            
+            JSONArray tablesJson = (JSONArray) jsonObj.get("tables");
+            DataBase db = new DataBase((String)jsonObj.get("name"));
+            
+            for(int i=0; i<tablesJson.size(); i++) {
+                JSONObject tableJson = (JSONObject) tablesJson.get(i);                
+                Table tb = new Table((String)tableJson.get("name"));  
+                                
+                JSONArray recordsJson = (JSONArray) tableJson.get("records");                
+                for(int j=0; j<recordsJson.size(); j++) {
+                   JSONObject object = (JSONObject) recordsJson.get(j);
+                    int integer = Integer.valueOf(object.get("integer").toString());
+                    float real = Float.valueOf(object.get("real").toString());
+                    long longint = (long)object.get("longint");
+                    char symbol = object.get("symbol").toString().charAt(0);
+                    String html = (String)object.get("html");
+                    Record record = new Record(integer, real, longint, symbol, html);
+                    tb.recordList.add(record);
+                }
+                                
+                db.tablesList.add(tb);
+            }
+            
+            return db;
+        } catch (ParseException ex) {System.out.println(ex);}
         return null;
     }
-    //TODO  
-    public Table json_to_table(String json) {
+    
+    public Table json_to_table(String json) {        
+        JSONParser parser = new JSONParser();                
+        try {
+            Object obj = parser.parse(json);            
+            JSONObject jsonObj = (JSONObject) obj;            
+            JSONArray ja = (JSONArray) jsonObj.get("records");
+            Table tb = new Table((String)jsonObj.get("name"));
+            for(int i=0; i<ja.size(); i++) {
+                JSONObject object = (JSONObject) ja.get(i);
+                int integer = Integer.valueOf(object.get("integer").toString());
+                float real = Float.valueOf(object.get("real").toString());
+                long longint = (long)object.get("longint");
+                char symbol = object.get("symbol").toString().charAt(0);
+                String html = (String)object.get("html");
+                Record record = new Record(integer, real, longint, symbol, html);
+                tb.recordList.add(record);
+            }            
+            
+            return tb;
+        } catch (ParseException ex) {System.out.println(ex);}
+            
         return null;
     }
     
@@ -46,15 +97,15 @@ public class JSONGenerator {
         JSONObject resultJson = new JSONObject();
         
         JSONArray array = new JSONArray();
-        resultJson.put("name", tb.name);
+        resultJson.put("name", (String)tb.name);
         resultJson.put("type", "table");
         for(Record record : tb.recordList) {
             JSONObject rec = new JSONObject();            
             rec.put("integer",record.integer);
-            rec.put("real",record.real);
-            rec.put("longint",record.longint);
-            rec.put("symbol",record.symbol);
-            rec.put("html",record.html);
+            rec.put("real",(float)record.real);
+            rec.put("longint",(long)record.longint);
+            rec.put("symbol",String.valueOf(record.symbol));
+            rec.put("html",(String)record.html);
             array.add(rec);
         }                
         resultJson.put("records", array);

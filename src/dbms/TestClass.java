@@ -123,11 +123,15 @@ public class TestClass {
         db.tablesList.add(tb1);
         db.tablesList.add(tb2);
         db.tablesList.add(tb3);
+                
+        //String js = jg.database_to_json(db);
         
-        
-        String js = jg.database_to_json(db);
-        SingletonDBMS dbms = SingletonDBMS.getInstance();
-        out.println(js);
+        String tb = jg.database_to_json(db);
+        out.println("tb: " + tb);
+        DataBase tbb = jg.json_to_database(tb);
+        out.println(tbb.tablesList.get(0).name);
+        //SingletonDBMS dbms = SingletonDBMS.getInstance();
+        //out.println(tb);
     }
     
 }
