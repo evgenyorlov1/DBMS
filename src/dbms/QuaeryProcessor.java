@@ -55,6 +55,10 @@ public class QuaeryProcessor {
             Object[] result = load_table(line);
             result[0] = 15; //15            
             return result; //15 
+        } else if((boolean)insert(line)[0]) {
+            Object[] result = insert(line);
+            result[0] = 16; //16           
+            return result; //16                    
         } else if((boolean)drop(line)[0]) {
             Object[] result = drop(line);
             result[0] = 101; //101
@@ -277,9 +281,23 @@ public class QuaeryProcessor {
         return result; 
     }
     
-    //db.###.insert({key: value})
-    private static void insert() {
+    //db.###.insert()
+    private static Object[] insert(String testString) {
+        Object[] result = {false, none};
         
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.insert\\(\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.insert\\(\\)$)"); 
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+        }
+        
+        return result; 
     }
     
     //db.###.find() 

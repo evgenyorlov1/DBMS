@@ -100,7 +100,10 @@ public class TextPanel extends javax.swing.JPanel {
                     break;     
                 case 15:
                     try {load_table(command);} catch(Exception e) {}
-                    break;     
+                    break; 
+                case 16:
+                    try {insert(command);} catch(Exception e) {}
+                    break;
                 case 101:
                     try {drop(command, lastLine);} catch(Exception e) {}              
                     break;                
@@ -236,6 +239,12 @@ public class TextPanel extends javax.swing.JPanel {
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                    
         }      
+    }
+    
+    private void insert(Object[] command) {
+        System.out.println("\ninsert");
+        InsertionFrame insertionFrame = new InsertionFrame(useState, (String)command[1]);
+        //insertionPanel.setVisible(true);
     }
     
     //TODO
