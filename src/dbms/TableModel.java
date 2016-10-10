@@ -7,6 +7,7 @@ package dbms;
 
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
+import static java.lang.System.out;
 
 /**
  *
@@ -15,9 +16,15 @@ import javax.swing.table.AbstractTableModel;
 public class TableModel extends AbstractTableModel{
 
     private ArrayList<String[]> rows;
+    private final String DBname;
+    private final String Tname;
+    private SingletonDBMS dbms;
     
-    public TableModel(ArrayList<String[]> rows) {
+    public TableModel(ArrayList<String[]> rows, String DBname, String Tname) {        
         super();
+        this.dbms = SingletonDBMS.getInstance();
+        this.DBname = DBname;
+        this.Tname = Tname;
         this.rows = rows;
     }
     
@@ -28,7 +35,7 @@ public class TableModel extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {        
-        return this.rows.get(0).length;
+        return this.rows.get(0).length+1;
     }
 
     @Override
@@ -42,6 +49,10 @@ public class TableModel extends AbstractTableModel{
                 return this.rows.get(rowIndex)[2];
             case 3:
                 return this.rows.get(rowIndex)[3];
+            case 4:
+                return this.rows.get(rowIndex)[4];
+            case 5:
+                return false;
             default:
                 return "";
         }
@@ -52,19 +63,57 @@ public class TableModel extends AbstractTableModel{
         String result = "";
         switch (columnIndex) {
             case 0:
-                result = "Tag1";
+                result = "Integer";
                 break;
             case 1:
-                result = "Tag2";
+                result = "Real";
                 break;
             case 2:
-                result = "Tag3";
+                result = "Longint";
                 break;
             case 3:
-                result = "Date";            
+                result = "Symbol";            
                 break;
+            case 4:
+                result = "html";
+                break;
+            case 5:
+                result = "Delete?";
         }
         return result;        
-    }     
+    }   
     
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if(rowIndex == 0) 
+            return false;
+        else 
+            return true;                
+    }
+    
+//    @Override
+//    public Class getColumnClass(int c) {
+//        switch(c) {
+//            case 0:
+//                return Integer.class;                
+//            case 1:
+//                return Float.class;
+//            case 2:
+//                return Long.class;
+//            case 3:
+//                return Character.class;
+//            case 4:
+//                return String.class;
+//            case 5:
+//                return Boolean.class;
+//        }
+//        return Integer.class;
+//    }
+    
+    @Override
+    public void setValueAt(Object value, int r, int c) {  
+        out.println("setValueAt");
+        this.rows.get(r)[c] = String.valueOf(value);        
+        dbms.update(rows, this.DBname, this.Tname);
+    }
 }

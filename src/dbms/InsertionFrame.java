@@ -23,6 +23,7 @@ public class InsertionFrame extends javax.swing.JFrame {
         this.Tname = Tname;
         setVisible(true);
         setResizable(false);
+        setTitle("Insertion");
         System.out.println("\ninsertionPanel");
         dbms = SingletonDBMS.getInstance();
         initComponents();

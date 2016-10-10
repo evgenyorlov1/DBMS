@@ -5,6 +5,7 @@
  */
 package dbms;
 
+import trash.TablePanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JFrame;
@@ -31,12 +32,11 @@ public class ViewFrame {
         
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         mainFrame.setTitle("DataBase");
-        mainFrame.setSize(500, 700);
+        mainFrame.setSize(500, 300);
         mainFrame.setResizable(false);
         
         mainFrame.setLayout(new BorderLayout());
-        mainFrame.add(textEntryPanel, BorderLayout.NORTH);
-        mainFrame.add(tablePanel, BorderLayout.SOUTH);        
+        mainFrame.add(textEntryPanel, BorderLayout.NORTH);            
         
         mainFrame.setVisible(true);
         mainFrame.setBackground(Color.WHITE); 

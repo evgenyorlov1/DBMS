@@ -274,6 +274,29 @@ public class SingletonDBMS {
         }
     }
     
+    public void update(ArrayList<String[]> rows, String DBname, String Tname) {
+        Table tb = new Table(Tname);
+        for(int i=0; i<rows.size(); i++) {
+            int integer = Integer.valueOf(rows.get(i)[0]);
+            float real = Float.valueOf(rows.get(i)[1]);
+            long longint = Long.valueOf(rows.get(i)[2]);
+            char symbol = rows.get(i)[3].charAt(0);
+            String html = rows.get(i)[4];
+            Record record = new Record(integer, real, longint, symbol, html);
+            tb.recordList.add(record);
+        }
+        for(int i=0; i<databases.size(); i++) {
+            if(databases.get(i).name.equals(DBname)) {
+                for(int j=0; j<databases.get(i).tablesList.size(); j++) {
+                    if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
+                       databases.get(i).tablesList.set(j, tb); 
+                       System.out.println("sfsd");
+                    }
+                }
+            }
+        }
+    }
+    
     //TEST
     public boolean is_unique_name(String useState) {
         for(int i=0; i<databases.size(); i++) {

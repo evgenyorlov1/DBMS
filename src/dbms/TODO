@@ -1,20 +1,7 @@
-Look at Variant pattern for schemeless tabels 
 Add null value
 
-Add output to table or to terminal
 Add Login(user, admin)
-insert value
-save db
-save tb
-
-Add db.tb.save()
-Add db.tb.find().save().
-Add db.tb.find().skip().
-                .limit().
-                .sort().
-                       save()
-
 
 Change to chemeless table
-ADD save destination
-ADD choose where to save
+Add delete row
+Add update row

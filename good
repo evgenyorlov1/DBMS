@@ -1,0 +1,1 @@
+{"tables":[{"records":[{"symbol":"a","longint":1,"html":"a","integer":1,"real":1.0},{"symbol":"b","longint":2,"html":"b","integer":2,"real":2.0},{"symbol":"c","longint":3,"html":"c","integer":3,"real":3.0}],"name":"tb1","type":"table"}],"name":"db1","type":"database"}

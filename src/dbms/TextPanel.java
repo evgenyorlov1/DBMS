@@ -253,6 +253,7 @@ public class TextPanel extends javax.swing.JPanel {
         ArrayList<String[]> results = new ArrayList<>();
         if(!useState.equals(this.none)) {            
             results = dbms.find(useState, (String)command[1]);
+            TableFrame tableFrame = new TableFrame(results, useState, (String)command[1]);
         } else {           
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                   
@@ -265,6 +266,7 @@ public class TextPanel extends javax.swing.JPanel {
         ArrayList<String[]> results = new ArrayList<>();
         if(!useState.equals(this.none)) {                  
             results = dbms.limit(useState, (String)command[1], (int)command[2]);
+            TableFrame tableFrame = new TableFrame(results, useState, (String)command[1]);
         } else {           
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                   
@@ -277,6 +279,7 @@ public class TextPanel extends javax.swing.JPanel {
         ArrayList<String[]> results = new ArrayList<>();
         if(!useState.equals(this.none)) {                                
             results = dbms.sort(useState, (String)command[1], (String)command[2], (int)command[3]);
+            TableFrame tableFrame = new TableFrame(results, useState, (String)command[1]);
         } else {            
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);
@@ -288,6 +291,7 @@ public class TextPanel extends javax.swing.JPanel {
         ArrayList<String[]> results = new ArrayList<>();
         if(!useState.equals(this.none)) {            
             results = dbms.skip(useState, (String)command[1], (int)command[2]);
+            TableFrame tableFrame = new TableFrame(results, useState, (String)command[1]);
         } else {            
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                    

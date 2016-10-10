@@ -186,7 +186,7 @@ public class QuaeryProcessor {
     //-
     private static Object[] save(String testString) {  
         Object[] result = {false, none};
-        Pattern pattern = Pattern.compile("^db\\.save\\([a-zA-Z]+\\)$");          
+        Pattern pattern = Pattern.compile("^db\\.save\\([a-zA-Z0-9]+\\)$");          
         Pattern file = Pattern.compile("(?<=save\\()(.*)(?=\\)$)");
         
         Matcher patternMatch = pattern.matcher(testString);         
@@ -206,7 +206,7 @@ public class QuaeryProcessor {
         System.out.println("save_table");
         Object[] result = {false, none, none};
         
-        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.save\\([a-zA-Z]+\\)$");  
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.save\\([a-zA-Z0-9]+\\)$");  
         Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.save\\([a-zA-Z]+\\)$)");  
         Pattern file = Pattern.compile("(?<=save\\()(.*)(?=\\)$)");
         
