@@ -33,6 +33,10 @@ public class QuaeryProcessor {
             Object[] result = use(line);
             result[0] = 2; //2            
             return result;
+        } else if((boolean)load(line)[0]) {
+            Object[] result = load(line);
+            result[0] = 3; //3
+            return result;
         } else if(db(line)) {            
             return new Object[] {10}; //10
         } else if(show_tables(line)) {
@@ -212,6 +216,29 @@ public class QuaeryProcessor {
         }
         
         return result; 
+    }
+    
+    private static Object[] load(String testString) {
+        Object[] result = {false, none};
+        
+        Pattern pattern = Pattern.compile("^load\\([a-zA-Z]+\\)$");
+        Pattern file = Pattern.compile("(?<=load\\()(.*)(?=\\)$)");
+                
+        Matcher patternMatch = pattern.matcher(testString);                 
+        Matcher fileMatch = file.matcher(testString); 
+        
+        if(patternMatch.matches()) {
+            result[0] = true;            
+            fileMatch.find();
+            result[1] = fileMatch.group();
+        }
+        
+        return result;
+    }
+    
+    private static Object[] load_table(String testString) {
+        Object[] result = {false, none};
+        return result;
     }
     
     //db.###.drop() 

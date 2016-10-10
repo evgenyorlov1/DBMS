@@ -79,7 +79,10 @@ public class TextPanel extends javax.swing.JPanel {
                     break;                                    
                 case 2:
                     use();
-                    break;                                   
+                    break; 
+                case 3: 
+                    try {load(command);} catch(Exception e) {}
+                    break;
                 case 10:
                     db();
                     break;                
@@ -210,6 +213,11 @@ public class TextPanel extends javax.swing.JPanel {
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                    
         }    
+    }
+    
+    private void load(Object[] command) throws Exception{
+        dbms.load((String)command[1]);
+        System.out.println("\nload_database");        
     }
     
     //TODO

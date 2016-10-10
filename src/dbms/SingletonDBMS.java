@@ -5,8 +5,14 @@
  */
 package dbms;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -131,6 +137,27 @@ public class SingletonDBMS {
             fileWriter.flush();
             fileWriter.close();
         } catch(Exception e) {}
+    }
+    
+    public void load(String file) {
+        BufferedReader br = null;
+        String json = "";
+        try {
+            String sCurrentLine;
+            br = new BufferedReader(
+                    new FileReader(System.getProperty("user.dir").concat("/"+file))
+            );
+            while ((sCurrentLine = br.readLine()) != null) {
+                json = json.concat(sCurrentLine);
+            }
+        } catch(Exception e) {}
+        JSONGenerator generator = new JSONGenerator();
+        DataBase db = generator.json_to_database(json);
+        databases.add(db);
+    }
+    
+    public void load(String file, String DBname) {
+        
     }
     
     //TEST
