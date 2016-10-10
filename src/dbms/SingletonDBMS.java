@@ -156,8 +156,28 @@ public class SingletonDBMS {
         databases.add(db);
     }
     
-    public void load(String file, String DBname) {
+    public void load(String DBname, String file) {
+        BufferedReader br = null;
+        String json = "";
         
+        try {
+            String sCurrentLine;
+            br = new BufferedReader(
+                    new FileReader(System.getProperty("user.dir").concat("/"+file))
+            );
+            while ((sCurrentLine = br.readLine()) != null) {
+                json = json.concat(sCurrentLine);
+            }
+        } catch(Exception e) {}
+        
+        JSONGenerator generator = new JSONGenerator();
+        Table tb = generator.json_to_table(json);
+        
+        for(DataBase db : databases) {
+            if(db.name.equals(DBname)) {
+                db.tablesList.add(tb);
+            }
+        }                
     }
     
     //TEST

@@ -97,7 +97,10 @@ public class TextPanel extends javax.swing.JPanel {
                     break;    
                 case 14:
                     try {save(command, lastLine);} catch(Exception e) {}
-                    break;                                    
+                    break;     
+                case 15:
+                    try {load_table(command);} catch(Exception e) {}
+                    break;     
                 case 101:
                     try {drop(command, lastLine);} catch(Exception e) {}              
                     break;                
@@ -218,6 +221,10 @@ public class TextPanel extends javax.swing.JPanel {
     private void load(Object[] command) throws Exception{
         dbms.load((String)command[1]);
         System.out.println("\nload_database");        
+    }
+    
+    private void load_table(Object[] command) throws Exception{
+        dbms.load(useState, (String)command[1]);
     }
     
     //TODO

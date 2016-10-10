@@ -49,9 +49,12 @@ public class QuaeryProcessor {
             return result;
         } else if((boolean)save(line)[0]) {
             Object[] result = save(line);
-            result[0] = 14; //14
-            System.out.println("QP switch: "+result[1]);
+            result[0] = 14; //14            
             return result; //14  
+        } else if((boolean)load_table(line)[0]) {
+            Object[] result = load_table(line);
+            result[0] = 15; //15            
+            return result; //15 
         } else if((boolean)drop(line)[0]) {
             Object[] result = drop(line);
             result[0] = 101; //101
@@ -221,7 +224,7 @@ public class QuaeryProcessor {
     private static Object[] load(String testString) {
         Object[] result = {false, none};
         
-        Pattern pattern = Pattern.compile("^load\\([a-zA-Z]+\\)$");
+        Pattern pattern = Pattern.compile("^load\\([a-zA-Z0-9]+\\)$");
         Pattern file = Pattern.compile("(?<=load\\()(.*)(?=\\)$)");
                 
         Matcher patternMatch = pattern.matcher(testString);                 
@@ -238,6 +241,18 @@ public class QuaeryProcessor {
     
     private static Object[] load_table(String testString) {
         Object[] result = {false, none};
+        
+        Pattern pattern = Pattern.compile("^db.load\\([a-zA-Z0-9]+\\)$");
+        Pattern file = Pattern.compile("(?<=db.load\\()(.*)(?=\\)$)");
+                
+        Matcher patternMatch = pattern.matcher(testString);                 
+        Matcher fileMatch = file.matcher(testString); 
+        
+        if(patternMatch.matches()) {
+            result[0] = true;            
+            fileMatch.find();
+            result[1] = fileMatch.group();
+        }
         return result;
     }
     
