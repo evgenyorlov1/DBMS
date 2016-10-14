@@ -7,10 +7,16 @@ package dbms;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +29,8 @@ public class SingletonDBMS {
     private static ArrayList<DataBase> databases = new ArrayList<>();
     private static final String admin = "admin";
     private static final String user = "user";
+    private static boolean isAdmin = false;
+    
     
     private SingletonDBMS() {}
     
@@ -176,23 +184,31 @@ public class SingletonDBMS {
         }                
     }
     
-    //TEST
-    public String register(User login) {
+    //TESTED
+    public boolean register(User login) {        
         users.add(login);
-        return user;
+        try {
+            serialize();
+        } catch (Exception ex) {}        
+        return true;
     }
-    
-    //TODO
-    //FIX
-    public String login(User login) {
-        if(users.contains(login)) {
-            for(int i=0; i<users.size(); i++) {
-                if(users.get(i).username.equals(admin)) {
-                    return admin;
-                }
+        
+    //TESTED
+    public boolean login(User login) {        
+        try {
+            deserialize();            
+        } catch (Exception ex) {}            
+        
+        for(User user : users) {
+            if(user.password.equals(login.password) && user.username.equals(login.username)) {
+                if(login.username.equals(admin)) {
+                    this.isAdmin = true;
+                    return true;                    
+                } 
+                return true;
             }
-        } 
-        return admin;
+        }
+        return false;
     }
     
     //TESTED
@@ -289,8 +305,7 @@ public class SingletonDBMS {
             if(databases.get(i).name.equals(DBname)) {
                 for(int j=0; j<databases.get(i).tablesList.size(); j++) {
                     if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
-                       databases.get(i).tablesList.set(j, tb); 
-                       System.out.println("sfsd");
+                       databases.get(i).tablesList.set(j, tb);                        
                     }
                 }
             }
@@ -336,4 +351,18 @@ public class SingletonDBMS {
         return records;
     }        
 
-}
+    private void serialize() throws Exception {
+        FileOutputStream out = new FileOutputStream("config");
+        ObjectOutputStream oos = new ObjectOutputStream(out);
+        oos.writeObject(users);
+        oos.flush();            
+    }    
+    
+    private void deserialize() throws Exception {
+        ArrayList<User> users = new ArrayList<User>();
+        FileInputStream in = new FileInputStream("config");
+        ObjectInputStream ois = new ObjectInputStream(in);
+        users = (ArrayList<User>) (ois.readObject());
+        this.users = users;
+    }
+ }

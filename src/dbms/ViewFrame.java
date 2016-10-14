@@ -5,7 +5,6 @@
  */
 package dbms;
 
-import trash.TablePanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JFrame;
@@ -16,18 +15,16 @@ import javax.swing.JFrame;
  */ 
 public class ViewFrame {   
     
-    public static JFrame mainFrame;
-    public static TablePanel tablePanel;
+    public static JFrame mainFrame;    
     public static TextPanel textEntryPanel;                        
     
     
-    public static void main (String args[]) {                
+    public static void main () {         
         initComponents();               
     }    
     
     public static void initComponents() {
-        mainFrame = new JFrame();                
-        tablePanel = new TablePanel();
+        mainFrame = new JFrame();
         textEntryPanel = new TextPanel();
         
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        

@@ -11,12 +11,12 @@ import java.io.Serializable;
  *
  * @author pc
  */
-public class User implements Serializable{
+public class User implements Serializable {
     public String username;
     public String password;
     
     public User(String username, String password) {
         this.username = username;
-        this.password = password;
+        this.password = password;        
     }
 }

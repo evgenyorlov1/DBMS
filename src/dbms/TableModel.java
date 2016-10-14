@@ -111,9 +111,10 @@ public class TableModel extends AbstractTableModel{
 //    }
     
     @Override
-    public void setValueAt(Object value, int r, int c) {  
-        out.println("setValueAt");
-        this.rows.get(r)[c] = String.valueOf(value);        
-        dbms.update(rows, this.DBname, this.Tname);
+    public void setValueAt(Object value, int r, int c) {
+        if(!this.rows.get(r)[c].equals(value.toString())) {
+            this.rows.get(r)[c] = String.valueOf(value);        
+            dbms.update(rows, this.DBname, this.Tname);
+        }
     }
 }

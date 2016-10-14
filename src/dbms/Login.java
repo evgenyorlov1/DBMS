@@ -111,14 +111,35 @@ public class Login extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String username = jTextField1.getText();
-        String password = jPasswordField1.getSelectedText();
-        User user = new User(username, password);
-        
+        char[] password = jPasswordField1.getPassword();                
+        User user = new User(username, String.valueOf(password));
+        jTextField1.setText("");
+        jPasswordField1.setText("");
+        SingletonDBMS dbms = SingletonDBMS.getInstance();
+        boolean log = dbms.login(user);
+        if(log == true) {
+            //start ViewFrame
+            ViewFrame console = new ViewFrame();
+            setVisible(false);
+            console.main();
+        } else {
+            Warning warn = new Warning();
+            warn.setVisible(true);
+        }        
     }//GEN-LAST:event_jButton1ActionPerformed
     
     //Register
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        String username = jTextField1.getText();
+        char[] password = jPasswordField1.getPassword();                
+        User user = new User(username, String.valueOf(password));
+        
+        SingletonDBMS dbms = SingletonDBMS.getInstance();
+        dbms.register(user);
+        ViewFrame console = new ViewFrame();
+        setVisible(false);
+        console.main();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

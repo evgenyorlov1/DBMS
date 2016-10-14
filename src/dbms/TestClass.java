@@ -5,6 +5,8 @@
  */
 package dbms;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +19,9 @@ import static java.lang.System.out;
  */
 public class TestClass {
         
-    public static void main(String args[]) {
-        JSONGeneratortest();
+    public static void main(String args[]) throws Exception {
+        //serialize();
+        //JSONGeneratortest();
         
 //        SingletonDBMS dbms = SingletonDBMS.getInstance();
 //        //DBMS dbms = new DBMS();
@@ -133,5 +136,15 @@ public class TestClass {
         //SingletonDBMS dbms = SingletonDBMS.getInstance();
         //out.println(tb);
     }
+    
+    public static void serialize() throws Exception {
+        ArrayList<User> users = new ArrayList<User>();
+        User user = new User("admin", "admin");
+        users.add(user);
+        FileOutputStream out = new FileOutputStream("config");
+        ObjectOutputStream oos = new ObjectOutputStream(out);
+        oos.writeObject(users);
+        oos.flush();            
+    }   
     
 }
