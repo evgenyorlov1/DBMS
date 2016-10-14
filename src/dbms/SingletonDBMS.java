@@ -65,84 +65,96 @@ public class SingletonDBMS {
         return tables;
     }
     
-    //TESTED
-    public void drop_database(String DBname) {        
-        for(int i=0; i<databases.size(); i++) {
-            if(databases.get(i).name.equals(DBname)) {
-                databases.remove(i);
-            }
-        }
-    }
-    
-    //TESTED
-    public void drop_table(String DBname, String Tname) {        
-        for(int i=0; i<databases.size(); i++) {
-            if(databases.get(i).name.equals(DBname)) {
-                for(int j=0; j<databases.get(i).tablesList.size(); j++) {
-                   if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
-                       databases.get(i).tablesList.remove(j);
-                   }
+    //isAdmin modifier
+    public void drop_database(String DBname) {
+        if(isAdmin) {
+            for(int i=0; i<databases.size(); i++) {
+                if(databases.get(i).name.equals(DBname)) {
+                    databases.remove(i);
                 }
             }
         }
     }
     
-    //TESTED, add name unique test
-    public void create_database(String DBname) {
-        DataBase db = new DataBase(DBname);
-        databases.add(db);
+    //isAdmin modifier
+    public void drop_table(String DBname, String Tname) {   
+        if(isAdmin) {
+            for(int i=0; i<databases.size(); i++) {
+                if(databases.get(i).name.equals(DBname)) {
+                    for(int j=0; j<databases.get(i).tablesList.size(); j++) {
+                       if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
+                           databases.get(i).tablesList.remove(j);
+                       }
+                    }
+                }
+            }
+        }
     }
     
-    //TESTED, add name unique test
+    //isAdmin modifier
+    public void create_database(String DBname) {
+        if(isAdmin) {
+            DataBase db = new DataBase(DBname);
+            databases.add(db);
+        }
+    }
+    
+    //isAdmin modifier
     public void create_table(String DBname, String Tname) {   
-        System.out.println("DBMS.create_table");
-        for(int i=0; i<databases.size(); i++) {
-            if(databases.get(i).name.equals(DBname)) {
-                //System.out.println("create_table: " + Tname);
-                databases.get(i).tablesList.add(new Table(Tname));
+        if(isAdmin) {
+            for(int i=0; i<databases.size(); i++) {
+                if(databases.get(i).name.equals(DBname)) {
+                    //System.out.println("create_table: " + Tname);
+                    databases.get(i).tablesList.add(new Table(Tname));
+                }
+            }        
+        }
+    }
+    
+    //isAdmin modifier
+    public void save(String DBname, String fileName) {
+        if(isAdmin) {
+            String json = "";
+            JSONGenerator generator = new JSONGenerator();
+            for(DataBase db : databases) {
+                if(db.name.equals(DBname))
+                    json = generator.database_to_json(db);
             }
+
+            try {
+                File file = new File(fileName);
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(json);            
+                fileWriter.flush();
+                fileWriter.close();
+            } catch(Exception e) {}
         }        
     }
     
-    //TODO
-    public void save(String DBname, String fileName) {
-        String json = "";
-        JSONGenerator generator = new JSONGenerator();
-        for(DataBase db : databases) {
-            if(db.name.equals(DBname))
-                json = generator.database_to_json(db);
-        }
-        
-        try {
-            File file = new File(fileName);
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(json);            
-            fileWriter.flush();
-            fileWriter.close();
-        } catch(Exception e) {}
-    }
-    
-    //TODO
+    //isAdmin modifier
     public void save(String DBname, String Tname, String fileName) {
-        String json = "";
-        JSONGenerator generator = new JSONGenerator();
-        for(DataBase db : databases) {
-            if(db.name.equals(DBname))
-                for(Table tb : db.tablesList) {
-                    if(tb.name.equals(Tname))
-                        json = generator.table_to_json(tb);
-                }
-        }
-        
-        try {
-            File file = new File(fileName);
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(json);            
-            fileWriter.flush();
-            fileWriter.close();
-        } catch(Exception e) {}
+        if(isAdmin) {
+            String json = "";
+            JSONGenerator generator = new JSONGenerator();
+            for(DataBase db : databases) {
+                if(db.name.equals(DBname))
+                    for(Table tb : db.tablesList) {
+                        if(tb.name.equals(Tname))
+                            json = generator.table_to_json(tb);
+                    }
+            }
+
+            try {
+                File file = new File(fileName);
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(json);            
+                fileWriter.flush();
+                fileWriter.close();
+            } catch(Exception e) {}
+        }        
     }
     
+    //isAdmin modifier
     public void load(String file) {
         BufferedReader br = null;
         String json = "";
@@ -160,6 +172,7 @@ public class SingletonDBMS {
         databases.add(db);
     }
     
+    //isAdmin modifier
     public void load(String DBname, String file) {
         BufferedReader br = null;
         String json = "";
@@ -365,4 +378,5 @@ public class SingletonDBMS {
         users = (ArrayList<User>) (ois.readObject());
         this.users = users;
     }
+        
  }

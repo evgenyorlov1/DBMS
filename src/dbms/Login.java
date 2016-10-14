@@ -117,8 +117,7 @@ public class Login extends javax.swing.JFrame {
         jPasswordField1.setText("");
         SingletonDBMS dbms = SingletonDBMS.getInstance();
         boolean log = dbms.login(user);
-        if(log == true) {
-            //start ViewFrame
+        if(log == true) {            
             ViewFrame console = new ViewFrame();
             setVisible(false);
             console.main();
