@@ -166,7 +166,7 @@ public class DBMS {
             if(databases.get(i).name.equals(DBname)) {
                 for(int j=0; j<databases.get(i).tablesList.size(); j++) {
                    if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
-                       databases.get(i).tablesList.get(j).recordList.add(record);
+                       databases.get(i).tablesList.get(j).records.add(record);
                    }
                 }
             }
@@ -179,7 +179,7 @@ public class DBMS {
             if(databases.get(i).name.equals(DBname)) {                
                 for(int j=0; j<databases.get(i).tablesList.size(); j++) {
                    if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
-                       databases.get(i).tablesList.get(j).recordList.add(record);
+                       databases.get(i).tablesList.get(j).records.add(record);
                    }
                 }                
             }
@@ -203,7 +203,7 @@ public class DBMS {
             if(databases.get(i).name.equals(DBname)) {
                 for(int j=0; j<databases.get(i).tablesList.size(); j++) {
                    if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
-                       records = databases.get(i).tablesList.get(j).recordList;
+                       records = databases.get(i).tablesList.get(j).Table.this.records;
                    }
                 }
             }

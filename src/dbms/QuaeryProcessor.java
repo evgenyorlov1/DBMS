@@ -6,6 +6,7 @@
 package dbms;
 
 
+import java.util.ArrayList;
 import java.util.regex.*;
 
 /**
@@ -81,7 +82,6 @@ public class QuaeryProcessor {
             return result;
         } else if((boolean)skip(line)[0]) {
             Object[] result = skip(line);
-            System.out.println("QuaeryProcessor.skip");
             result[0] = 1003; //1003
             return result;
         } else {                        
@@ -161,17 +161,26 @@ public class QuaeryProcessor {
         return m.matches(); 
     }
     
-    //db.createTable(###)
+    //db.createTable(name, {key1:type, key2:type, key3:type, ###})
     //table name
     //TESTED
     private static Object[] create_table(String testString) {  
-        Object[] result = {false, none};
+        ArrayList<String[]> keyType = new ArrayList<String[]>();
+        Object[] result = {false, none, keyType};        
         
-        Pattern pattern = Pattern.compile("^db\\.createTable\\([a-zA-Z0-9]+\\)$");
-        Pattern name = Pattern.compile("(?<=^db\\.createTable\\()(.*)(?=\\)$)");
-        
+        Pattern pattern = Pattern.compile("^db\\.createTable\\(.*\\)$");
+        Pattern name = Pattern.compile("(?<=^db\\.createTable\\()([a-zA-Z]+)(?=\\,)");
+        Pattern kType = Pattern.compile("(?<=\\{)(.*)(?=\\})");         
+                
         Matcher patternMatch = pattern.matcher(testString);
-        Matcher nameMatch = name.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);         
+        Matcher kTypeMatch = kType.matcher(testString);
+        
+        kTypeMatch.find();
+        String[] keys = kTypeMatch.group().split(",");                 
+        for(String kt : keys) {
+            keyType.add(kt.split(":"));
+        }                
         
         if(patternMatch.matches()) {
             result[0] = true;

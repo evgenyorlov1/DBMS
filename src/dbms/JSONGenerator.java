@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package dbms;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.*;
@@ -58,7 +56,7 @@ public class JSONGenerator {
                     char symbol = object.get("symbol").toString().charAt(0);
                     String html = (String)object.get("html");
                     Record record = new Record(integer, real, longint, symbol, html);
-                    tb.recordList.add(record);
+                    tb.records.add(record);
                 }
                                 
                 db.tablesList.add(tb);
@@ -84,7 +82,7 @@ public class JSONGenerator {
                 char symbol = object.get("symbol").toString().charAt(0);
                 String html = (String)object.get("html");
                 Record record = new Record(integer, real, longint, symbol, html);
-                tb.recordList.add(record);
+                tb.records.add(record);
             }            
             
             return tb;
@@ -99,7 +97,7 @@ public class JSONGenerator {
         JSONArray array = new JSONArray();
         resultJson.put("name", (String)tb.name);
         resultJson.put("type", "table");
-        for(Record record : tb.recordList) {
+        for(Record record : tb.records) {
             JSONObject rec = new JSONObject();            
             rec.put("integer",record.integer);
             rec.put("real",(float)record.real);

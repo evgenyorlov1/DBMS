@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dbms;
 
 import java.io.FileOutputStream;
@@ -11,15 +6,20 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static java.lang.System.out;
+import java.util.HashMap;
+import java.util.Map;
 
 
-/**
- *
- * @author pc
- */
 public class TestClass {
         
     public static void main(String args[]) throws Exception {
+        ArrayList<Integer> array = new ArrayList<>();
+        array.add(1); array.add(3); array.add(5); array.add(7); array.add(9);
+        array.add(2); array.add(4); array.add(6); array.add(8); array.add(10);
+        for(int i : array) {
+            
+        }
+        schameless();
         //serialize();
         //JSONGeneratortest();
         
@@ -100,41 +100,41 @@ public class TestClass {
     }
     
     public static void JSONGeneratortest() {
-        JSONGenerator jg = new JSONGenerator();
-        
-        Record record1 = new Record(1,1,1,'a', "a");
-        Record record2 = new Record(2,2,2,'b',"b");
-        Record record3 = new Record(3,3,3,'c',"c");
-        Record record4 = new Record(4,4,4,'d',"d");
-        Table tb1 = new Table("tb1");
-        tb1.recordList.add(record1);
-        tb1.recordList.add(record2);
-        tb1.recordList.add(record3);
-        tb1.recordList.add(record4);
-        Table tb2 = new Table("tb2");
-        tb2.recordList.add(record1);
-        tb2.recordList.add(record2);
-        tb2.recordList.add(record3);
-        tb2.recordList.add(record4);
-        Table tb3 = new Table("tb3");
-        tb3.recordList.add(record1);
-        tb3.recordList.add(record2);
-        tb3.recordList.add(record3);
-        tb3.recordList.add(record4);
-        
-        DataBase db = new DataBase("db1");
-        db.tablesList.add(tb1);
-        db.tablesList.add(tb2);
-        db.tablesList.add(tb3);
-                
-        //String js = jg.database_to_json(db);
-        
-        String tb = jg.database_to_json(db);
-        out.println("tb: " + tb);
-        DataBase tbb = jg.json_to_database(tb);
-        out.println(tbb.tablesList.get(0).name);
-        //SingletonDBMS dbms = SingletonDBMS.getInstance();
-        //out.println(tb);
+//        JSONGenerator jg = new JSONGenerator();
+//        
+//        Record record1 = new Record(1,1,1,'a', "a");
+//        Record record2 = new Record(2,2,2,'b',"b");
+//        Record record3 = new Record(3,3,3,'c',"c");
+//        Record record4 = new Record(4,4,4,'d',"d");
+//        Table tb1 = new Table("tb1");
+//        tb1.recordList.add(record1);
+//        tb1.recordList.add(record2);
+//        tb1.recordList.add(record3);
+//        tb1.recordList.add(record4);
+//        Table tb2 = new Table("tb2");
+//        tb2.recordList.add(record1);
+//        tb2.recordList.add(record2);
+//        tb2.recordList.add(record3);
+//        tb2.recordList.add(record4);
+//        Table tb3 = new Table("tb3");
+//        tb3.recordList.add(record1);
+//        tb3.recordList.add(record2);
+//        tb3.recordList.add(record3);
+//        tb3.recordList.add(record4);
+//        
+//        DataBase db = new DataBase("db1");
+//        db.tablesList.add(tb1);
+//        db.tablesList.add(tb2);
+//        db.tablesList.add(tb3);
+//                
+//        //String js = jg.database_to_json(db);
+//        
+//        String tb = jg.database_to_json(db);
+//        out.println("tb: " + tb);
+//        DataBase tbb = jg.json_to_database(tb);
+//        out.println(tbb.tablesList.get(0).name);
+//        //SingletonDBMS dbms = SingletonDBMS.getInstance();
+//        //out.println(tb);
     }
     
     public static void serialize() throws Exception {
@@ -147,4 +147,39 @@ public class TestClass {
         oos.flush();            
     }   
     
+    public static void schameless() {
+        SingletonDBMS dbms = SingletonDBMS.getInstance();                
+        dbms.create_database("db");
+        ArrayList<String[]> keyType = new ArrayList<>();
+        keyType.add(new String[] {"quantity", TYPE.INTEGER});
+        keyType.add(new String[] {"price",TYPE.REAL});
+        keyType.add(new String[] {"description", TYPE.HTML});
+        ArrayList<String[]> keyValue = new ArrayList<>();
+        keyValue.add(new String[] {"quantity", TYPE.INTEGER});
+        
+        dbms.create_table("db", "tb", keyType);
+        dbms.databases.get(0).tables.get(0).insert(keyType);        
+        
+//        keyType.put(Record.INTEGER, "quantity");
+//        keyType.put(Record.REAL, "price");
+//        keyType.put(Record.HTML, "description");
+//        keyType.put(Record.HTML, "producer");
+//        keyType.put(Record.INTEGER, "bought");
+        
+//        Record record = new Record(keyType, keyValue);
+//        db.tablesList.add(new Table("tb", keyType));
+//        db.tablesList.get(0).records.add(record);
+//        out.print(keyType.size());
+//        out.println(db.tablesList.get(0).keyType.get(0));
+//        
+//        dbms.create_database("db");
+//        dbms.create_table("db", "tb", keyType);
+        
+        
+        
+//        out.println("db.name: " + db.name);
+//        out.println("tb.name: " + db.tablesList.get(0).name);
+//        out.println(db.tablesList.get(0).recordList.get(0).get().entrySet());
+    }
+     
 }

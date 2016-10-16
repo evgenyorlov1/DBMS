@@ -134,11 +134,13 @@ public class TextPanel extends javax.swing.JPanel {
         }            
     }//GEN-LAST:event_EnterPressed
 
+    //TESTED
     private void clear() {
         System.out.println("\nclear");
         jTextPane1.setText(""); //FIX caret on second line    
     }
     
+    //TESTED
     private void show_dbs() throws Exception{
         System.out.println("\nshow dbs");
         ArrayList<String> dbs = dbms.show_dbs();  
@@ -150,6 +152,7 @@ public class TextPanel extends javax.swing.JPanel {
         }
     }
     
+    //TESTED
     private void use() {
         System.out.println("\nuse");
         System.out.println(useState);
@@ -159,6 +162,7 @@ public class TextPanel extends javax.swing.JPanel {
             System.out.println("TextPanel.select_database");            
     }
     
+    //TESTED
     private void db() {
         System.out.println("\ndb");
         if(!useState.equals("none")) 
@@ -167,6 +171,7 @@ public class TextPanel extends javax.swing.JPanel {
             jTextPane1.setText("select database with use");
     }
     
+    //TESTED
     private void show_tables(String lastLine) throws Exception{
         System.out.println("\nshow tables");
         if(!useState.equals(this.none)) {
@@ -180,6 +185,7 @@ public class TextPanel extends javax.swing.JPanel {
         }
     }
     
+    //TESTED
     private void dropDatabase(String lastLine) throws Exception{
         System.out.println("\ndropDatabase");
         if(!useState.equals(this.none)) {
@@ -191,16 +197,18 @@ public class TextPanel extends javax.swing.JPanel {
         }    
     }
     
+    //TESTED
     private void createTable(Object[] command, String lastLine) throws Exception {
         System.out.println("\ncreateTable");
         if(!useState.equals("none")) {
-            dbms.create_table(useState, (String)command[1]);
+            dbms.create_table(useState, (String)command[1], (ArrayList<String[]>)command[2]);
         } else {            
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                    
         }   
     }
         
+    //TODO
     private void save(Object[] command, String lastLine) throws Exception{
         System.out.println("\nsave");
         System.out.println("table save: "+(String)command[1]);
@@ -212,6 +220,7 @@ public class TextPanel extends javax.swing.JPanel {
         }    
     }
     
+    //TODO
     private void save_table(Object[] command, String lastLine) throws Exception{
         System.out.println("\nsave_database");
         if(!useState.equals(this.none)) {
@@ -222,16 +231,18 @@ public class TextPanel extends javax.swing.JPanel {
         }    
     }
     
+    //TODO
     private void load(Object[] command) throws Exception{
         dbms.load((String)command[1]);
         System.out.println("\nload_database");        
     }
     
+    //TODO
     private void load_table(Object[] command) throws Exception{
         dbms.load(useState, (String)command[1]);
     }
     
-    //TODO
+    //TESTED
     private void drop(Object[] command, String lastLine) throws Exception{
         System.out.println("\ndrop");
         if(!useState.equals(this.none)) {
@@ -242,6 +253,7 @@ public class TextPanel extends javax.swing.JPanel {
         }      
     }
     
+    //TODO
     private void insert(Object[] command) {
         System.out.println("\ninsert");
         InsertionFrame insertionFrame = new InsertionFrame(useState, (String)command[1]);

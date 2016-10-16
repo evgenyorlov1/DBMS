@@ -1,23 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dbms;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author pc
- */
+
 public class Table {
     
-    public final String name;
-    ArrayList<Record> recordList = new ArrayList<Record>();
-    public static String[] metadata = {"Integer","Real","Longint","Char","HTML"};
+    public final String name;    
+    public final ArrayList<String[]> keyType; 
+    public ArrayList<Record> records = new ArrayList<Record>();   
     
-    public Table(String name) {        
-        this.name = name;        
+    
+    public Table(String name, ArrayList<String[]> keyType) {                
+        this.name = name;
+        this.keyType = keyType;
     }        
+    
+    public void insert(ArrayList<String[]> keyValue) {
+        Record record = new Record(keyValue);
+        records.add(record);
+    }
+        
 }
