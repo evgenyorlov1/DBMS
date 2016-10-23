@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dbms;
+package trash;
+
+import dbms.Record;
+import dbms.SingletonDBMS;
 
 /**
  *

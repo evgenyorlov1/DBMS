@@ -1,9 +1,10 @@
 package dbms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Table {
+public class Table implements Serializable {
     
     public final String name;    
     public final ArrayList<String[]> keyType; 

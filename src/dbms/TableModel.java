@@ -15,17 +15,20 @@ import static java.lang.System.out;
  */
 public class TableModel extends AbstractTableModel{
 
-    private ArrayList<String[]> rows;
+    private ArrayList<ArrayList<String[]>> rows;
     private final String DBname;
     private final String Tname;
     private SingletonDBMS dbms;
+    private final ArrayList<String[]> keyType;
     
-    public TableModel(ArrayList<String[]> rows, String DBname, String Tname) {        
-        super();
+    public TableModel(ArrayList<ArrayList<String[]>> rows, String DBname, String Tname) {        
+        super();        
+        System.out.println("TableModel.TableModel");
         this.dbms = SingletonDBMS.getInstance();
         this.DBname = DBname;
         this.Tname = Tname;
         this.rows = rows;
+        this.keyType = dbms.get_metadata(DBname, Tname);        
     }
     
     @Override
@@ -35,52 +38,17 @@ public class TableModel extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {        
-        return this.rows.get(0).length+1;
+        return keyType.size();//this.rows.get(0).length+1;
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        switch(columnIndex) {
-            case 0:
-                return this.rows.get(rowIndex)[0];
-            case 1:
-                return this.rows.get(rowIndex)[1];
-            case 2:
-                return this.rows.get(rowIndex)[2];
-            case 3:
-                return this.rows.get(rowIndex)[3];
-            case 4:
-                return this.rows.get(rowIndex)[4];
-            case 5:
-                return false;
-            default:
-                return "";
-        }
+    public Object getValueAt(int rowIndex, int columnIndex) {        
+        return rows.get(rowIndex).get(columnIndex)[1];
     }
     
     @Override
-    public String getColumnName(int columnIndex) {
-        String result = "";
-        switch (columnIndex) {
-            case 0:
-                result = "Integer";
-                break;
-            case 1:
-                result = "Real";
-                break;
-            case 2:
-                result = "Longint";
-                break;
-            case 3:
-                result = "Symbol";            
-                break;
-            case 4:
-                result = "html";
-                break;
-            case 5:
-                result = "Delete?";
-        }
-        return result;        
+    public String getColumnName(int columnIndex) {        
+        return keyType.get(columnIndex)[0];        
     }   
     
     @Override
@@ -112,9 +80,9 @@ public class TableModel extends AbstractTableModel{
     
     @Override
     public void setValueAt(Object value, int r, int c) {
-        if(!this.rows.get(r)[c].equals(value.toString())) {
-            this.rows.get(r)[c] = String.valueOf(value);        
-            dbms.update(rows, this.DBname, this.Tname);
-        }
+//        if(!this.rows.get(r)[c].equals(value.toString())) {
+//            this.rows.get(r)[c] = String.valueOf(value);        
+//            dbms.update(rows, this.DBname, this.Tname);
+//        }
     }
 }

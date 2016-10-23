@@ -13,13 +13,13 @@ import java.util.ArrayList;
  */
 public class TableFrame extends javax.swing.JFrame {
 
-    private ArrayList<String[]> rows;
+    private ArrayList<ArrayList<String[]>> rows;
     private final String DBname;
     private final String Tname;
     /**
      * Creates new form TableFrame
      */
-    public TableFrame(ArrayList<String[]> rows, String DBname, String Tname) {
+    public TableFrame(ArrayList<ArrayList<String[]>> rows, String DBname, String Tname) {
         this.rows = rows;
         this.DBname = DBname;
         this.Tname = Tname;

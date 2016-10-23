@@ -69,8 +69,7 @@ public class TextPanel extends javax.swing.JPanel {
                     [currentText.split("\n").length-1];           
                       
             useState = QuaeryProcessor.useState(lastLine, useState);            
-            Object[] command = QuaeryProcessor.parse(lastLine);  
-            
+            Object[] command = QuaeryProcessor.parse(lastLine);             
             switch((int)command[0]) {                
                 case 0:   
                     clear();             
@@ -103,7 +102,7 @@ public class TextPanel extends javax.swing.JPanel {
                     try {load_table(command);} catch(Exception e) {}
                     break; 
                 case 16:
-                    try {insert(command);} catch(Exception e) {}
+                    try {insert(command, lastLine);} catch(Exception e) {}
                     break;
                 case 101:
                     try {drop(command, lastLine);} catch(Exception e) {}              
@@ -113,6 +112,18 @@ public class TextPanel extends javax.swing.JPanel {
                     break;    
                 case 103:
                     try {save_table(command, lastLine);} catch(Exception e) {} 
+                    break;
+                case 104:
+                    try {count(command, lastLine);} catch(Exception e) {} 
+                    break;
+                case 105: 
+                    try {update(command, lastLine);} catch(Exception e) {} 
+                    break;
+                case 106:                    
+                    try {remove_id(command, lastLine);} catch(Exception e) {} 
+                    break;
+                case 107:
+                    try {remove_key(command, lastLine);} catch(Exception e) {} 
                     break;
                 case 1001:
                     try {limit(command, lastLine);} catch(Exception e) {}              
@@ -136,13 +147,13 @@ public class TextPanel extends javax.swing.JPanel {
 
     //TESTED
     private void clear() {
-        System.out.println("\nclear");
+        System.out.println("TextPanel.clear");
         jTextPane1.setText(""); //FIX caret on second line    
     }
     
     //TESTED
     private void show_dbs() throws Exception{
-        System.out.println("\nshow dbs");
+        System.out.println("TextPanel.show_dbs");
         ArrayList<String> dbs = dbms.show_dbs();  
         
         for(String db : dbs) {
@@ -154,7 +165,7 @@ public class TextPanel extends javax.swing.JPanel {
     
     //TESTED
     private void use() {
-        System.out.println("\nuse");
+        System.out.println("TextPanel.use");
         System.out.println(useState);
         if(dbms.is_unique_name(useState))          
             dbms.create_database(useState);
@@ -164,7 +175,7 @@ public class TextPanel extends javax.swing.JPanel {
     
     //TESTED
     private void db() {
-        System.out.println("\ndb");
+        System.out.println("TextPanel.db");    
         if(!useState.equals("none")) 
             jTextPane1.setText(useState + "\n");
         else 
@@ -173,7 +184,7 @@ public class TextPanel extends javax.swing.JPanel {
     
     //TESTED
     private void show_tables(String lastLine) throws Exception{
-        System.out.println("\nshow tables");
+        System.out.println("TextPanel.show_tables");
         if(!useState.equals(this.none)) {
             ArrayList<String> tables = dbms.show_tables(useState);
             for(String tb : tables)             
@@ -187,7 +198,7 @@ public class TextPanel extends javax.swing.JPanel {
     
     //TESTED
     private void dropDatabase(String lastLine) throws Exception{
-        System.out.println("\ndropDatabase");
+        System.out.println("TextPanel.dropDatabase");
         if(!useState.equals(this.none)) {
             dbms.drop_database(useState);
             useState = this.none;
@@ -199,7 +210,7 @@ public class TextPanel extends javax.swing.JPanel {
     
     //TESTED
     private void createTable(Object[] command, String lastLine) throws Exception {
-        System.out.println("\ncreateTable");
+        System.out.println("TextPanel.createTable");        
         if(!useState.equals("none")) {
             dbms.create_table(useState, (String)command[1], (ArrayList<String[]>)command[2]);
         } else {            
@@ -208,43 +219,43 @@ public class TextPanel extends javax.swing.JPanel {
         }   
     }
         
-    //TODO
+    //TESTED
     private void save(Object[] command, String lastLine) throws Exception{
-        System.out.println("\nsave");
-        System.out.println("table save: "+(String)command[1]);
+        System.out.println("TextPanel.save");        
         if(!useState.equals(this.none)) {
-            dbms.save(useState, (String)command[1]);
+            dbms.save_serialization(useState, (String)command[1]);
         } else {
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                    
         }    
     }
     
-    //TODO
+    //TESTED
     private void save_table(Object[] command, String lastLine) throws Exception{
-        System.out.println("\nsave_database");
+        System.out.println("TextPanel.save_database");
         if(!useState.equals(this.none)) {
-            dbms.save(useState, (String)command[1], (String)command[2]);
+            dbms.save_serialization(useState, (String)command[1], (String)command[2]);
         } else {
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
                 "\n".concat(lastLine.concat(" - select database")), null);                                    
         }    
     }
     
-    //TODO
+    //TESTED
     private void load(Object[] command) throws Exception{
-        dbms.load((String)command[1]);
-        System.out.println("\nload_database");        
+        System.out.println("TextPanel.load_database");        
+        dbms.load_serialization((String)command[1]);        
     }
     
-    //TODO
+    //TESTED
     private void load_table(Object[] command) throws Exception{
-        dbms.load(useState, (String)command[1]);
+        System.out.println("TextPanel.load_table");        
+        dbms.load_serialization(useState, (String)command[1]);
     }
     
     //TESTED
     private void drop(Object[] command, String lastLine) throws Exception{
-        System.out.println("\ndrop");
+        System.out.println("TextPanel.drop");
         if(!useState.equals(this.none)) {
             dbms.drop_table(useState, (String)command[1]);
         } else {            
@@ -253,17 +264,60 @@ public class TextPanel extends javax.swing.JPanel {
         }      
     }
     
-    //TODO
-    private void insert(Object[] command) {
-        System.out.println("\ninsert");
-        InsertionFrame insertionFrame = new InsertionFrame(useState, (String)command[1]);
-        //insertionPanel.setVisible(true);
+    //TESTED
+    private void insert(Object[] command, String lastLine) throws Exception {
+        System.out.println("TextPanel.insert");  
+        if(!useState.equals(this.none)) {                        
+            dbms.insert(useState, (String)command[1], (ArrayList<String[]>)command[2]);
+        } else {           
+            jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
+                "\n".concat(lastLine.concat(" - wrong command")), null);                                   
+        }            
     }
     
-    //TODO
+    //TESTED
+    private void remove_id(Object[] command, String lastLine) {
+        System.out.println("TextPanel.remove_id");                
+        if(!useState.equals(this.none)) {                               
+            dbms.remove(useState, command[1].toString(), command[2].toString());            
+        } else {           
+            try {
+                jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
+                    "\n".concat(lastLine.concat(" - select database")), null);                                   
+            } catch(Exception e) {System.out.println("error");}
+        }
+    }
+    
+    //TESTED
+    private void remove_key(Object[] command, String lastLine) {
+        System.out.println("TextPanel.remove_key");          
+        if(!useState.equals(this.none)) {                               
+            dbms.remove(useState, command[1].toString(), (ArrayList<String[]>)command[2]);            
+        } else {           
+            try {
+                jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
+                    "\n".concat(lastLine.concat(" - select database")), null);                                   
+            } catch(Exception e) {System.out.println("error");}
+        }
+    }
+    
+    //TEST
+    private void update(Object[] command, String lastLine) throws Exception {
+        System.out.println("TextPanel.update");
+        ArrayList<String[]> keyValue = (ArrayList<String[]>)command[3];
+        
+        if(!useState.equals(this.none)) {            
+            dbms.update(command[2].toString(), keyValue, useState, command[1].toString());            
+        } else {           
+            jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
+                "\n".concat(lastLine.concat(" - error")), null);                                   
+        }
+    }
+    
+    //TESTED
     private void find(Object[] command, String lastLine) throws Exception {
-        System.out.println("\nfind");
-        ArrayList<String[]> results = new ArrayList<>();
+        System.out.println("TextPanel.find");
+        ArrayList<ArrayList<String[]>> results = new ArrayList<>();
         if(!useState.equals(this.none)) {            
             results = dbms.find(useState, (String)command[1]);
             TableFrame tableFrame = new TableFrame(results, useState, (String)command[1]);
@@ -273,12 +327,26 @@ public class TextPanel extends javax.swing.JPanel {
         }       
     }
     
-    //TODO
-    private void limit(Object[] command, String lastLine) throws Exception {
-        System.out.println("\nlimit");
-        ArrayList<String[]> results = new ArrayList<>();
+    //TESTED
+    private void count(Object[] command, String lastLine) throws Exception {
+        System.out.println("TextPanel.count");
+        int results = 0;
         if(!useState.equals(this.none)) {                  
-            results = dbms.limit(useState, (String)command[1], (int)command[2]);
+            results = dbms.count(useState, (String)command[1]); 
+            jTextPane1.getDocument().insertString(jTextPane1.getText().
+                        length(), "\n".concat(String.valueOf(results)), null);    
+        } else {           
+            jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
+                "\n".concat(lastLine.concat(" - wrong command")), null);                                   
+        }    
+    }
+    
+    //TESTED
+    private void limit(Object[] command, String lastLine) throws Exception {
+        System.out.println("TextPanel.limit");
+        ArrayList<ArrayList<String[]>> results = new ArrayList<ArrayList<String[]>>();
+        if(!useState.equals(this.none)) {             
+            results = dbms.limit(useState, (String)command[1], (int)command[2]);                        
             TableFrame tableFrame = new TableFrame(results, useState, (String)command[1]);
         } else {           
             jTextPane1.getDocument().insertString(jTextPane1.getText().length(), 
@@ -286,10 +354,10 @@ public class TextPanel extends javax.swing.JPanel {
         }     
     }
     
-    //TODO
+    //TESTED
     private void sort(Object[] command, String lastLine) throws Exception{
-        System.out.println("\nTextPanel.sort");
-        ArrayList<String[]> results = new ArrayList<>();
+        System.out.println("TextPanel.sort");        
+        ArrayList<ArrayList<String[]>> results = new ArrayList<ArrayList<String[]>>();
         if(!useState.equals(this.none)) {                                
             results = dbms.sort(useState, (String)command[1], (String)command[2], (int)command[3]);
             TableFrame tableFrame = new TableFrame(results, useState, (String)command[1]);
@@ -299,9 +367,10 @@ public class TextPanel extends javax.swing.JPanel {
         }     
     }
     
-    //TODO
+    //TESTED
     private void skip(Object[] command, String lastLine) throws Exception{
-        ArrayList<String[]> results = new ArrayList<>();
+        System.out.println("TextPanel.skip");
+        ArrayList<ArrayList<String[]>> results = new ArrayList<ArrayList<String[]>>();
         if(!useState.equals(this.none)) {            
             results = dbms.skip(useState, (String)command[1], (int)command[2]);
             TableFrame tableFrame = new TableFrame(results, useState, (String)command[1]);

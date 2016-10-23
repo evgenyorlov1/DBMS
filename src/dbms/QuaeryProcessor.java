@@ -25,7 +25,8 @@ public class QuaeryProcessor {
     //[2] - key
     //[3] - order
     public static Object[] parse(String line) {
-                    
+        System.out.println("QuaeryProcessor.parse");       
+        
         if(clear(line)) {             
             return new Object[] {0}; //0
         } else if(show_dbs(line)) {
@@ -67,11 +68,27 @@ public class QuaeryProcessor {
         } else if((boolean)find(line)[0]) { 
             Object[] result = find(line);
             result[0] = 102; //102
-            return result;
+            return result;            
+        } else if((boolean)count(line)[0]) { 
+            Object[] result = count(line);
+            result[0] = 104; //104
+            return result;  
         } else if((boolean)save_table(line)[0]) {
             Object[] result = save_table(line);
             result[0] = 103; //103
             return result;            
+        } else if((boolean)update(line)[0]) {
+            Object[] result = update(line);
+            result[0] = 105; //105
+            return result; 
+        } else if((boolean)remove_id(line)[0]) {
+            Object[] result = remove_id(line);
+            result[0] = 106; //106           
+            return result; 
+        } else if((boolean)remove_key(line)[0]) {
+            Object[] result = remove_key(line);
+            result[0] = 107; //107         
+            return result; 
         } else if((boolean)limit(line)[0]) {
             Object[] result = limit(line);
             result[0] = 1001; //1001
@@ -91,6 +108,7 @@ public class QuaeryProcessor {
     
     //TESTE
     public static String useState(String line, String use) {
+        System.out.println("QuaeryProcessor.useState");
         Pattern p = Pattern.compile("use [a-zA-Z0-9]+$");  
         Matcher m = p.matcher(line);        
         if(m.matches()) {
@@ -103,6 +121,7 @@ public class QuaeryProcessor {
     //clear
     //-
     private static boolean clear(String testString) {  
+        System.out.println("QuaeryProcessor.clear");
         Pattern p = Pattern.compile("^clear$");  
         Matcher m = p.matcher(testString);         
         return m.matches(); 
@@ -110,7 +129,8 @@ public class QuaeryProcessor {
     
     //show dbs 
     //-
-    private static boolean show_dbs(String testString) {  
+    private static boolean show_dbs(String testString) { 
+        System.out.println("QuaeryProcessor.show_dbs");
         Pattern p = Pattern.compile("^show dbs$");  
         Matcher m = p.matcher(testString);         
         return m.matches(); 
@@ -119,7 +139,8 @@ public class QuaeryProcessor {
     //use db_name 
     //table name 
     //TESTED
-    private static Object[] use(String testString) {  
+    private static Object[] use(String testString) { 
+        System.out.println("QuaeryProcessor.use");
         Object[] result = {false, none};       
         
         Pattern pattern = Pattern.compile("^use [a-zA-Z0-9]+$");
@@ -139,7 +160,8 @@ public class QuaeryProcessor {
     
     //db 
     //-
-    private static boolean db(String testString) {  
+    private static boolean db(String testString) { 
+        System.out.println("QuaeryProcessor.db");
         Pattern p = Pattern.compile("^db$");  
         Matcher m = p.matcher(testString);         
         return m.matches(); 
@@ -148,6 +170,7 @@ public class QuaeryProcessor {
     //show tables 
     //-
     private static boolean show_tables(String testString) {  
+        System.out.println("QuaeryProcessor.show_tables");
         Pattern p = Pattern.compile("^show tables$");  
         Matcher m = p.matcher(testString);         
         return m.matches(); 
@@ -156,6 +179,7 @@ public class QuaeryProcessor {
     //db.dropDatabase() 
     //-
     private static boolean drop_database(String testString) {  
+        System.out.println("QuaeryProcessor.drop_database");
         Pattern p = Pattern.compile("^db\\.dropDatabase\\(\\)$");  
         Matcher m = p.matcher(testString);         
         return m.matches(); 
@@ -164,7 +188,8 @@ public class QuaeryProcessor {
     //db.createTable(name, {key1:type, key2:type, key3:type, ###})
     //table name
     //TESTED
-    private static Object[] create_table(String testString) {  
+    private static Object[] create_table(String testString) { 
+        System.out.println("QuaeryProcessor.create_table");
         ArrayList<String[]> keyType = new ArrayList<String[]>();
         Object[] result = {false, none, keyType};        
         
@@ -174,15 +199,15 @@ public class QuaeryProcessor {
                 
         Matcher patternMatch = pattern.matcher(testString);
         Matcher nameMatch = name.matcher(testString);         
-        Matcher kTypeMatch = kType.matcher(testString);
-        
-        kTypeMatch.find();
-        String[] keys = kTypeMatch.group().split(",");                 
-        for(String kt : keys) {
-            keyType.add(kt.split(":"));
-        }                
+        Matcher kTypeMatch = kType.matcher(testString);                         
         
         if(patternMatch.matches()) {
+            kTypeMatch.find();
+            String[] keys = kTypeMatch.group().split(",");                 
+            for(String kt : keys) {
+                keyType.add(kt.split(":"));
+            }       
+            
             result[0] = true;
             nameMatch.find();
             result[1] = nameMatch.group();
@@ -194,6 +219,7 @@ public class QuaeryProcessor {
     //db.save() 
     //-
     private static Object[] save(String testString) {  
+        System.out.println("QuaeryProcessor.save");
         Object[] result = {false, none};
         Pattern pattern = Pattern.compile("^db\\.save\\([a-zA-Z0-9]+\\)$");          
         Pattern file = Pattern.compile("(?<=save\\()(.*)(?=\\)$)");
@@ -207,12 +233,12 @@ public class QuaeryProcessor {
             result[1] = fileMatch.group();            
             System.out.println("group:" + fileMatch.group());
         }              
-        System.out.println("file:" + result[1]);
+        
         return result; 
     }
     
     private static Object[] save_table(String testString) { 
-        System.out.println("save_table");
+        System.out.println("QuaeryProcessor.save_table");
         Object[] result = {false, none, none};
         
         Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.save\\([a-zA-Z0-9]+\\)$");  
@@ -235,6 +261,7 @@ public class QuaeryProcessor {
     }
     
     private static Object[] load(String testString) {
+        System.out.println("QuaeryProcessor.load");
         Object[] result = {false, none};
         
         Pattern pattern = Pattern.compile("^load\\([a-zA-Z0-9]+\\)$");
@@ -253,6 +280,7 @@ public class QuaeryProcessor {
     }
     
     private static Object[] load_table(String testString) {
+        System.out.println("QuaeryProcessor.load_table");
         Object[] result = {false, none};
         
         Pattern pattern = Pattern.compile("^db.load\\([a-zA-Z0-9]+\\)$");
@@ -272,7 +300,8 @@ public class QuaeryProcessor {
     //db.###.drop() 
     //table name
     //TESTED
-    private static Object[] drop(String testString) {  
+    private static Object[] drop(String testString) { 
+        System.out.println("QuaeryProcessor.drop");
         Object[] result = {false, none};
         
         Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.drop\\(\\)$");  
@@ -290,21 +319,31 @@ public class QuaeryProcessor {
         return result; 
     }
     
-    //db.###.insert()
+    //db.###.insert({key1:value,key2:value,key3:value})
     private static Object[] insert(String testString) {
-        Object[] result = {false, none};
+        System.out.println("QuaeryProcessor.insert");
+        ArrayList<String[]> keyValue = new ArrayList<String[]>();
+        Object[] result = {false, none, keyValue};                
         
-        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.insert\\(\\)$");  
-        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.insert\\(\\)$)"); 
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.insert\\(.*\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.insert)");             //table 
+        Pattern kValue = Pattern.compile("(?<=\\.insert\\(\\{)(.*)(?=\\})");       //keyvalue
         
         Matcher patternMatch = pattern.matcher(testString);
-        Matcher nameMatch = name.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);                
+        Matcher kValueMatch = kValue.matcher(testString);                                 
         
         if(patternMatch.matches()) {
+            kValueMatch.find();
+            String[] keys = kValueMatch.group().split(",");
+            for(String k : keys) {
+                keyValue.add(k.split(":"));
+            }
+            
             result[0] = true;
             nameMatch.find();
-            result[1] = nameMatch.group();
-        }
+            result[1] = nameMatch.group();            
+        }      
         
         return result; 
     }
@@ -313,7 +352,8 @@ public class QuaeryProcessor {
     //ADD queries
     //table name
     //TESTED
-    private static Object[] find(String testString) {  
+    private static Object[] find(String testString) { 
+        System.out.println("QuaeryProcessor.find");
         Object[] result = {false, none};
         
         Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)$");  
@@ -331,11 +371,121 @@ public class QuaeryProcessor {
         return result; 
     }
     
+    //db.###.remove(_id:###)    
+    //TESTED
+    private static Object[] remove_id(String testString) {
+        System.out.println("QuaeryProcessor.remove_id");
+        Object[] result = {false, none, none};
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.remove\\(_id:[0-9]+\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.remove\\()");          //table
+        Pattern id = Pattern.compile("(?<=\\.remove\\(_id:)(.*)(?=\\))");          //id
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        Matcher idMatch = id.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();            
+            idMatch.find();
+            result[2] = Integer.parseInt(idMatch.group());            
+        }
+        
+        return result;
+    }
+    
+    //TESTED
+    //db.###.remove({key1:value,key2:value,key3:value})
+    private static Object[] remove_key(String testString) {
+        System.out.println("QuaeryProcessor.remove_key");
+        ArrayList<String[]> keyValue = new ArrayList<String[]>();
+        Object[] result = {false, none, keyValue};        
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.remove\\(\\{[a-zA-Z0-9:,.]+\\}\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.remove\\()");          //table
+        Pattern keyVal = Pattern.compile("(?<=\\.remove\\(\\{)(.*)(?=\\}\\))");    //keyvalue
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        Matcher keyValMatch = keyVal.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();            
+            keyValMatch.find();
+            String[] keys = keyValMatch.group().split(",");
+            for(String k : keys) {
+                keyValue.add(k.split(":"));                
+            }
+        }
+        
+        return result;
+    }
+    
+    //db.###.update({_id:###},{key1:value,key2:value,key3:value})
+    //TODO
+    private static Object[] update(String testString) {
+        System.out.println("QuaeryProcessor.update");
+        ArrayList<String[]> keyValue = new ArrayList<String[]>();
+        Object[] result = {false, none, none, keyValue};        
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.update\\(.*\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.update\\()");
+        Pattern keyVal = Pattern.compile("(?<=\\.update\\()(.*)(?=\\))");    //keyvalue                
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        Matcher keyValMatch = keyVal.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();            
+            keyValMatch.find();
+            String[] keys = keyValMatch.group().split(",");
+            for(String k : keys) {
+                k = k.replaceAll("[{}]" , "");                 
+                keyValue.add(k.split(":"));
+            }
+        }
+        for(String[] k : keyValue) {
+            if(k[0].equals("_id")) {
+                result[2] = k[1];
+                keyValue.remove(k);
+                break;
+            }
+        }         
+        return result;
+    }
+    
+    private static Object[] count(String testString) {
+        System.out.println("QuaeryProcessor.count");
+        Object[] result = {false, none};
+        
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.count\\(\\)$");  
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.count\\(\\)$)");  
+        
+        Matcher patternMatch = pattern.matcher(testString);
+        Matcher nameMatch = name.matcher(testString);
+        
+        if(patternMatch.matches()) {
+            result[0] = true;
+            nameMatch.find();
+            result[1] = nameMatch.group();
+        }
+        
+        return result;
+    }
+    
     //db.###.find().limit(###) 
     //table name
     //number
     //TESTED
-    private static Object[] limit(String testString) {  
+    private static Object[] limit(String testString) { 
+        System.out.println("QuaeryProcessor.limit");
         Object[] result = {false, none, none};
         
         Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.limit\\([0-9]+\\)$");  
@@ -363,12 +513,13 @@ public class QuaeryProcessor {
     //order int
     //TESTED
     private static Object[] sort(String testString) {
+        System.out.println("QuaeryProcessor.sort");
         Object[] result = {false, none, none, none};
         
-        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.sort\\(\\{(integer|real|longint|char)\\:(-1|1)\\}\\)$");
-        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.find\\(\\)\\.sort\\()");        
-        Pattern key = Pattern.compile("(?<=\\.find\\(\\)\\.sort\\(\\{)(.*)(?=\\:)");        
-        Pattern order = Pattern.compile("(?<=\\.sort\\(\\{(integer|real|longint|char)\\:)(.*)(?=\\}\\)$)");
+        Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.sort\\(\\{[a-zA-Z0-9]+\\:(-1|1)\\}\\)$");
+        Pattern name = Pattern.compile("(?<=db\\.)(.*)(?=\\.find\\(\\)\\.sort\\()");  //table
+        Pattern key = Pattern.compile("(?<=\\.find\\(\\)\\.sort\\(\\{)(.*)(?=\\:)");  //key
+        Pattern order = Pattern.compile("(?<=\\:)(.*)(?=\\}\\)$)");                   //order
         
         Matcher patternMatch = pattern.matcher(testString);        
         Matcher nameMatch = name.matcher(testString);
@@ -393,6 +544,7 @@ public class QuaeryProcessor {
     //number int
     //TESTED
     private static Object[] skip(String testString) {
+        System.out.println("QuaeryProcessor.skip");
         Object[] result = {false, none, none};
         
         Pattern pattern = Pattern.compile("^db\\.[a-zA-Z0-9]+\\.find\\(\\)\\.skip\\([0-9]+\\)$"); 

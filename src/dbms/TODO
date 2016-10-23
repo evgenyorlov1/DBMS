@@ -1,7 +1,13 @@
-Add null value
+Add delete row .remove({query})
 
-Add Login(user, admin)
+Add update method through view table and script
 
-Change to chemeless table
-Add delete row
+FIX JSONGenerator
+
+ADD type checker to insert
+
+ADD update remove to QP, TP
+
+
+
 
