@@ -18,13 +18,13 @@ public class TableModel extends AbstractTableModel{
     private ArrayList<ArrayList<String[]>> rows;
     private final String DBname;
     private final String Tname;
-    private SingletonDBMS dbms;
+    private SingletonDBMSinterface dbms;
     private final ArrayList<String[]> keyType;
     
-    public TableModel(ArrayList<ArrayList<String[]>> rows, String DBname, String Tname) {        
+    public TableModel(ArrayList<ArrayList<String[]>> rows, String DBname, String Tname) throws Exception {        
         super();        
         System.out.println("TableModel.TableModel");
-        this.dbms = SingletonDBMS.getInstance();
+        this.dbms = SingletonDBMSclient.getInstance();
         this.DBname = DBname;
         this.Tname = Tname;
         this.rows = rows;

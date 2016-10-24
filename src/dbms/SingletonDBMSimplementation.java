@@ -1,32 +1,39 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dbms;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ *
+ * @author pc
+ */
 
-public class SingletonDBMS {
+//implement singletones
+public class SingletonDBMSimplementation extends java.rmi.server.UnicastRemoteObject implements SingletonDBMSinterface {
+
+    private static SingletonDBMS instance;    
+    private static ArrayList<User> users = new ArrayList<User>();
+    public static ArrayList<DataBase> databases = new ArrayList<>();
+    private static final String admin = "admin";
+    private static final String user = "user";
+    private static boolean isAdmin = true; //TESTING true
     
-    private SingletonDBMS instance;    
-    private ArrayList<User> users = new ArrayList<User>();
-    public ArrayList<DataBase> databases = new ArrayList<>();
-    private final String admin = "admin";
-    private final String user = "user";
-    private boolean isAdmin = true; //TESTING true
+    public SingletonDBMSimplementation() throws java.rmi.RemoteException {
+        super();
+    }
     
-    
-    public SingletonDBMS() {}       
-    
-    //TESTED
-    public ArrayList<String> show_dbs() {        
+    @Override
+    public ArrayList<String> show_dbs() throws RemoteException {
         ArrayList<String> databaseNames = new ArrayList<String>();        
         
         for(int i=0; i<databases.size(); i++) {
@@ -34,9 +41,9 @@ public class SingletonDBMS {
         }
         return databaseNames;
     }
-    
-    //TESTED
-    public ArrayList<String> show_tables(String DBname) {
+
+    @Override
+    public ArrayList<String> show_tables(String DBname) throws RemoteException {
         ArrayList<String> tables = new ArrayList<String>();
         
         for(int i=0; i<databases.size(); i++) {
@@ -48,9 +55,9 @@ public class SingletonDBMS {
         }
         return tables;
     }
-    
-    //TESTED
-    public void drop_database(String DBname) {
+
+    @Override
+    public void drop_database(String DBname) throws RemoteException {
         if(isAdmin) {
             for(int i=0; i<databases.size(); i++) {
                 if(databases.get(i).name.equals(DBname)) {
@@ -59,9 +66,9 @@ public class SingletonDBMS {
             }
         }
     }
-    
-    //TESTED    
-    public void drop_table(String DBname, String Tname) {   
+
+    @Override
+    public void drop_table(String DBname, String Tname) throws RemoteException {
         if(isAdmin) {
             for(int i=0; i<databases.size(); i++) {
                 if(databases.get(i).name.equals(DBname)) {
@@ -74,17 +81,17 @@ public class SingletonDBMS {
             }
         }
     }
-    
-    //TESTED
-    public void create_database(String DBname) {
+
+    @Override
+    public void create_database(String DBname) throws RemoteException {
         if(isAdmin) {
             DataBase db = new DataBase(DBname);
             databases.add(db);
         }
     }
-    
-    //TESTED
-    public void create_table(String DBname, String Tname, ArrayList<String[]> keyType) { 
+
+    @Override
+    public void create_table(String DBname, String Tname, ArrayList<String[]> keyType) throws RemoteException {
         final String[] id = new String[] {"_id", "integer"};
         keyType.add(id);
         
@@ -96,157 +103,75 @@ public class SingletonDBMS {
             }        
         }
     }
-    
-    //TESTED
-    public void save_serialization(String DBname, String fileName) throws Exception {
-        for(DataBase db : databases) {
-            if (db.name.equals(DBname)) {
-                FileOutputStream out = new FileOutputStream(fileName);
-                ObjectOutputStream oos = new ObjectOutputStream(out);
-                oos.writeObject(db);
-                oos.flush();
+
+    @Override
+    public void save_serialization(String DBname, String fileName) throws RemoteException {
+        try {    
+            for(DataBase db : databases) {
+                if (db.name.equals(DBname)) {
+                    FileOutputStream out = new FileOutputStream(fileName);
+                    ObjectOutputStream oos = new ObjectOutputStream(out);
+                    oos.writeObject(db);
+                    oos.flush();
+                }
             }
-        }        
+        } catch(Exception e) {}
     }
-    
-    //TEST
-    public void save_serialization(String DBname, String Tname, String fileName) throws Exception {
-        for(DataBase db : databases) {
-            if(db.name.equals(DBname)) {
-                for(Table tb : db.tables) {
-                    if(tb.name.equals(Tname)) {
-                        FileOutputStream out = new FileOutputStream(fileName);
-                        ObjectOutputStream oos = new ObjectOutputStream(out);
-                        oos.writeObject(tb);
-                        oos.flush();
+
+    @Override
+    public void save_serialization(String DBname, String Tname, String fileName) throws RemoteException {
+        try {
+            for(DataBase db : databases) {
+                if(db.name.equals(DBname)) {
+                    for(Table tb : db.tables) {
+                        if(tb.name.equals(Tname)) {
+                            FileOutputStream out = new FileOutputStream(fileName);
+                            ObjectOutputStream oos = new ObjectOutputStream(out);
+                            oos.writeObject(tb);
+                            oos.flush();
+                        }
                     }
                 }
             }
-        }
+        } catch(Exception e) {}
     }
-    
-    //TESTED
-    public void load_serialization(String file) throws Exception {
-        
-        FileInputStream in = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(in);
-        DataBase db = (DataBase) (ois.readObject());
-        this.databases.add(db);
+
+    @Override
+    public void load_serialization(String file) throws RemoteException {
+        try {
+            FileInputStream in = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(in);
+            DataBase db = (DataBase) (ois.readObject());
+            this.databases.add(db);        
+        } catch(Exception e) {}
     }
-    
-    //TEST
-    public void load_serialization(String DBname, String file) throws Exception {
-        
-        FileInputStream in = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(in);
-        Table tb = (Table) (ois.readObject());        
-        
-        for(DataBase db : databases) {
-            if(db.name.equals(DBname)) {
-                db.tables.add(tb);
-            }
-        }  
+
+    @Override
+    public void load_serialization(String DBname, String file) throws RemoteException {
+        try {
+            FileInputStream in = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(in);
+            Table tb = (Table) (ois.readObject());        
+
+            for(DataBase db : databases) {
+                if(db.name.equals(DBname)) {
+                    db.tables.add(tb);
+                }
+            }  
+        } catch(Exception e) {}
     }
-    
-    //TESTED
-//    public void save(String DBname, String fileName) {
-//        if(isAdmin) {
-//            String json = "";
-//            JSONGenerator generator = new JSONGenerator();
-//            for(DataBase db : databases) {
-//                if(db.name.equals(DBname))
-//                    json = generator.database_to_json(db);
-//            }
-//
-//            try {
-//                File file = new File(fileName);
-//                FileWriter fileWriter = new FileWriter(file);
-//                fileWriter.write(json);            
-//                fileWriter.flush();
-//                fileWriter.close();
-//            } catch(Exception e) {}
-//        }        
-//    }
-    
-    //TESTED
-//    public void save(String DBname, String Tname, String fileName) {
-//        if(isAdmin) {
-//            String json = "";
-//            JSONGenerator generator = new JSONGenerator();
-//            for(DataBase db : databases) {
-//                if(db.name.equals(DBname))
-//                    for(Table tb : db.tables) {
-//                        if(tb.name.equals(Tname))
-//                            json = generator.table_to_json(tb);
-//                    }
-//            }
-//
-//            try {
-//                File file = new File(fileName);
-//                FileWriter fileWriter = new FileWriter(file);
-//                fileWriter.write(json);            
-//                fileWriter.flush();
-//                fileWriter.close();
-//            } catch(Exception e) {}
-//        }        
-//    }
-    
-    //TESTED
-//    public void load(String file) {
-//        BufferedReader br = null;
-//        String json = "";
-//        try {
-//            String sCurrentLine;
-//            br = new BufferedReader(
-//                    new FileReader(System.getProperty("user.dir").concat("/"+file))
-//            );
-//            while ((sCurrentLine = br.readLine()) != null) {
-//                json = json.concat(sCurrentLine);
-//            }
-//        } catch(Exception e) {}
-//        JSONGenerator generator = new JSONGenerator();
-//        DataBase db = generator.json_to_database(json);
-//        databases.add(db);
-//    }
-    
-    //TESTED
-//    public void load(String DBname, String file) {
-//        BufferedReader br = null;
-//        String json = "";
-//        
-//        try {
-//            String sCurrentLine;
-//            br = new BufferedReader(
-//                    new FileReader(System.getProperty("user.dir").concat("/"+file))
-//            );
-//            while ((sCurrentLine = br.readLine()) != null) {
-//                json = json.concat(sCurrentLine);
-//            }
-//        } catch(Exception e) {}
-//        
-//        JSONGenerator generator = new JSONGenerator();
-//        Table tb = generator.json_to_table(json);
-//        
-//        for(DataBase db : databases) {
-//            if(db.name.equals(DBname)) {
-//                db.tables.add(tb);
-//            }
-//        }                
-//    }
-    
-    
-    
-    //TESTED
-    public boolean register(User login) {        
+
+    @Override
+    public boolean register(User login) throws RemoteException {
         users.add(login);
         try {
             serialize();
         } catch (Exception ex) {}        
         return true;
     }
-        
-    //TESTED
-    public boolean login(User login) {        
+
+    @Override
+    public boolean login(User login) throws RemoteException {
         try {
             deserialize();            
         } catch (Exception ex) {}            
@@ -262,9 +187,9 @@ public class SingletonDBMS {
         }
         return false;
     }
-    
-    //TESTED
-    public ArrayList<ArrayList<String[]>> find(String DBname, String Tname) {
+
+    @Override
+    public ArrayList<ArrayList<String[]>> find(String DBname, String Tname) throws RemoteException {
         ArrayList<Record> recs = get_records(DBname, Tname);  
         ArrayList<ArrayList<String[]>> records = new ArrayList<>();
         
@@ -273,9 +198,9 @@ public class SingletonDBMS {
         
         return records;
     }
-    
-    //TESTED
-    public ArrayList<String[]> get_metadata(String DBname, String Tname) {
+
+    @Override
+    public ArrayList<String[]> get_metadata(String DBname, String Tname) throws RemoteException {
         System.out.println("SingletonDBMS.get_metadata");        
         ArrayList<String[]> metadata = new ArrayList<>();
                 
@@ -290,9 +215,9 @@ public class SingletonDBMS {
         
         return metadata;
     }
-    
-    //TESTED
-    public ArrayList<ArrayList<String[]>> limit(String DBname, String Tname, int num) { 
+
+    @Override
+    public ArrayList<ArrayList<String[]>> limit(String DBname, String Tname, int num) throws RemoteException {
         System.out.println("SingletonDBMS.limit");
         ArrayList<Record> result = get_records(DBname, Tname);        
         ArrayList<ArrayList<String[]>> records = new ArrayList<>();
@@ -305,9 +230,9 @@ public class SingletonDBMS {
         }                
         return res;
     }
-            
-    //FIX WRONG ORDER
-    public ArrayList<ArrayList<String[]>> skip(String DBname, String Tname, int num) {
+
+    @Override
+    public ArrayList<ArrayList<String[]>> skip(String DBname, String Tname, int num) throws RemoteException {
         System.out.println("SingletonDBMS.skip");
         ArrayList<Record> recs = get_records(DBname, Tname);  
         ArrayList<ArrayList<String[]>> records = new ArrayList<>();        
@@ -321,9 +246,9 @@ public class SingletonDBMS {
         
         return result;
     }
-    
-    //TESTED
-    public ArrayList<ArrayList<String[]>> sort(String DBname, String Tname, String key, int order) {
+
+    @Override
+    public ArrayList<ArrayList<String[]>> sort(String DBname, String Tname, String key, int order) throws RemoteException {
         System.out.println("SingletonDBMS.sort");
         ArrayList<Record> recs = get_records(DBname, Tname);  
         ArrayList<ArrayList<String[]>> records = new ArrayList<>();        
@@ -344,9 +269,9 @@ public class SingletonDBMS {
         
         return bubble_sort(recs, comparator, key);
     }
-    
-    //TESTED
-    public int count(String DBname, String Tname) {
+
+    @Override
+    public int count(String DBname, String Tname) throws RemoteException {
         System.out.println("SingletonDBMS.count");
         int count = 0;
         for(DataBase db : databases) {
@@ -359,10 +284,10 @@ public class SingletonDBMS {
             }
         }
         return count;
-    }        
-    
-    //TESTED
-    public void insert(String DBname, String Tname, ArrayList<String[]> keyValue) {
+    }
+
+    @Override
+    public void insert(String DBname, String Tname, ArrayList<String[]> keyValue) throws RemoteException {
         System.out.println("SingletonDBMS.insert");
         String[] id = new String[2];
         id[0] = "_id";
@@ -378,34 +303,11 @@ public class SingletonDBMS {
                     tb.insert(keyValue);
                 }
             }
-        }                 
+        }       
     }
-    
-    //TODO
-    public void update(ArrayList<String[]> rows, String DBname, String Tname) {
-//        Table tb = new Table(Tname);
-//        for(int i=0; i<rows.size(); i++) {
-//            int integer = Integer.valueOf(rows.get(i)[0]);
-//            float real = Float.valueOf(rows.get(i)[1]);
-//            long longint = Long.valueOf(rows.get(i)[2]);
-//            char symbol = rows.get(i)[3].charAt(0);
-//            String html = rows.get(i)[4];
-//            Record record = new Record(integer, real, longint, symbol, html);
-//            tb.recordList.add(record);
-//        }
-//        for(int i=0; i<databases.size(); i++) {
-//            if(databases.get(i).name.equals(DBname)) {
-//                for(int j=0; j<databases.get(i).tablesList.size(); j++) {
-//                    if(databases.get(i).tablesList.get(j).name.equals(Tname)) {
-//                       databases.get(i).tablesList.set(j, tb);                        
-//                    }
-//                }
-//            }
-//        }
-    }
-    
-    //TESTED
-    public void update(String _id, ArrayList<String[]> keyVal, String DBname, String Tname) {
+
+    @Override
+    public void update(String _id, ArrayList<String[]> keyVal, String DBname, String Tname) throws RemoteException {
         System.out.println("SingletonDBMS.update");
         ArrayList<Record> records = new ArrayList<Record>();
         System.out.println(keyVal.size());
@@ -427,18 +329,18 @@ public class SingletonDBMS {
             }            
         }
     }
-    
-    //TESTED
-    public boolean is_unique_name(String useState) {
+
+    @Override
+    public boolean is_unique_name(String useState) throws RemoteException {
         for(int i=0; i<databases.size(); i++) {
             if(databases.get(i).name.equals(useState))
                 return false;
         }
         return true;
     }
-    
-    //TESTED
-    public void remove(String DBname, String Tname, String id) {       
+
+    @Override
+    public void remove(String DBname, String Tname, String id) throws RemoteException {
         System.out.println("SingletonDBMS.remove id");
         for(DataBase db : databases) 
             if(db.name.equals(DBname)) 
@@ -446,11 +348,11 @@ public class SingletonDBMS {
                     if(tb.name.equals(Tname)) 
                         for(int i=0; i<tb.records.size(); i++) 
                             if(tb.records.get(i).get_by_key("_id").equals(id))
-                                tb.records.remove(i);                                                                                                        
+                                tb.records.remove(i);    
     }
-    
-    //TESTED
-    public void remove(String DBname, String Tname, ArrayList<String[]> keyValues) {
+
+    @Override
+    public void remove(String DBname, String Tname, ArrayList<String[]> keyValues) throws RemoteException {
         System.out.println("SingletonDBMS.remove key");
         ArrayList<Record> records = new ArrayList<Record>();
         for(DataBase db : databases) 
@@ -471,9 +373,9 @@ public class SingletonDBMS {
                 records.remove(record);
         }
     }
-    
-    //TESTED
-    public ArrayList<Record> get_records(String DBname, String Tname) {
+
+    @Override
+    public ArrayList<Record> get_records(String DBname, String Tname) throws RemoteException {
         System.out.println("SingletonDBMS.get_records");
         
         ArrayList<Record> rec = new ArrayList<>();
@@ -489,10 +391,9 @@ public class SingletonDBMS {
                                                        
         return rec;
     }
-    
-    //TESTED
-    public ArrayList<ArrayList<String[]>> bubble_sort(ArrayList<Record> records, 
-            Comparator camparator, String key) {                 
+
+    @Override
+    public ArrayList<ArrayList<String[]>> bubble_sort(ArrayList<Record> records, Comparator camparator, String key) throws RemoteException {
         
         for(int i=0; i<records.size(); i++) {                        
             for(int j=0; j<records.size(); j++) {                
@@ -507,23 +408,32 @@ public class SingletonDBMS {
             result.add(records.get(i).keyValue); 
         
         return result;
-    }        
-
-    //TESTED
-    public void serialize() throws Exception {
-        FileOutputStream out = new FileOutputStream("config");
-        ObjectOutputStream oos = new ObjectOutputStream(out);
-        oos.writeObject(users);
-        oos.flush();            
-    }    
-    
-    //TESTED
-    public void deserialize() throws Exception {
-        ArrayList<User> users = new ArrayList<User>();
-        FileInputStream in = new FileInputStream("config");
-        ObjectInputStream ois = new ObjectInputStream(in);
-        users = (ArrayList<User>) (ois.readObject());
-        this.users = users;
     }
-        
- }
+
+    @Override
+    public void serialize() throws RemoteException {
+        try {
+            FileOutputStream out = new FileOutputStream("config");
+            ObjectOutputStream oos = new ObjectOutputStream(out);
+            oos.writeObject(users);
+            oos.flush();      
+        } catch(Exception e) {}
+    }
+
+    @Override
+    public void deserialize() throws RemoteException {
+        try {
+            ArrayList<User> users = new ArrayList<User>();
+            FileInputStream in = new FileInputStream("config");
+            ObjectInputStream ois = new ObjectInputStream(in);
+            users = (ArrayList<User>) (ois.readObject());
+            this.users = users;
+        } catch(Exception e) {}
+    }
+
+    @Override
+    public String hello() throws RemoteException {
+        return "Hello";
+    }
+    
+}

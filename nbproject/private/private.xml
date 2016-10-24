@@ -13,9 +13,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/pc/netBeansProjects/DBMS/src/dbms/TextPanel.java</file>
-            <file>file:/home/pc/netBeansProjects/DBMS/src/dbms/Login.java</file>
+            <file>file:/home/pc/netBeansProjects/DBMS/src/dbms/SingletonDBMSinterface.java</file>
+            <file>file:/home/pc/netBeansProjects/DBMS/src/dbms/SingletonDBMSclient.java</file>
             <file>file:/home/pc/netBeansProjects/DBMS/src/dbms/SingletonDBMS.java</file>
-            <file>file:/home/pc/netBeansProjects/DBMS/test/dbms/SingletonDBMSTest.java</file>
+            <file>file:/home/pc/netBeansProjects/DBMS/src/dbms/SingletonDBMSserver.java</file>
+            <file>file:/home/pc/netBeansProjects/DBMS/src/dbms/SingletonDBMSimplementation.java</file>
         </group>
     </open-files>
 </project-private>

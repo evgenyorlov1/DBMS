@@ -115,16 +115,18 @@ public class Login extends javax.swing.JFrame {
         User user = new User(username, String.valueOf(password));
         jTextField1.setText("");
         jPasswordField1.setText("");
-        SingletonDBMS dbms = SingletonDBMS.getInstance();
-        boolean log = dbms.login(user);
-        if(log == true) {            
-            ViewFrame console = new ViewFrame();
-            setVisible(false);
-            console.main();
-        } else {
-            Warning warn = new Warning();
-            warn.setVisible(true);
-        }        
+        try {
+            SingletonDBMSinterface dbms = SingletonDBMSclient.getInstance();
+            boolean log = dbms.login(user);
+            if(log == true) {            
+                ViewFrame console = new ViewFrame();
+                setVisible(false);
+                console.main();
+            } else {
+                Warning warn = new Warning();
+                warn.setVisible(true);
+            }    
+        } catch(Exception e) {}
     }//GEN-LAST:event_jButton1ActionPerformed
     
     //Register
@@ -134,7 +136,7 @@ public class Login extends javax.swing.JFrame {
         char[] password = jPasswordField1.getPassword();                
         User user = new User(username, String.valueOf(password));
         
-        SingletonDBMS dbms = SingletonDBMS.getInstance();
+        SingletonDBMS dbms = new SingletonDBMS();
         dbms.register(user);
         ViewFrame console = new ViewFrame();
         setVisible(false);

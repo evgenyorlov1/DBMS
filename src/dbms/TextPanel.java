@@ -18,7 +18,7 @@ public class TextPanel extends javax.swing.JPanel {
 
     
     private static String useState = "none";
-    private SingletonDBMS dbms;
+    private SingletonDBMSinterface dbms;
     private static final String none = "none";
     
     /*
@@ -26,7 +26,7 @@ public class TextPanel extends javax.swing.JPanel {
      */
     public TextPanel() {
         initComponents();
-        dbms = SingletonDBMS.getInstance();
+        dbms = SingletonDBMSclient.getInstance();
     }
 
     /**
@@ -167,10 +167,12 @@ public class TextPanel extends javax.swing.JPanel {
     private void use() {
         System.out.println("TextPanel.use");
         System.out.println(useState);
-        if(dbms.is_unique_name(useState))          
-            dbms.create_database(useState);
-        else 
-            System.out.println("TextPanel.select_database");            
+        try {
+            if(dbms.is_unique_name(useState))          
+                dbms.create_database(useState);
+            else 
+                System.out.println("TextPanel.select_database");            
+        } catch(Exception e) {}
     }
     
     //TESTED
@@ -276,7 +278,7 @@ public class TextPanel extends javax.swing.JPanel {
     }
     
     //TESTED
-    private void remove_id(Object[] command, String lastLine) {
+    private void remove_id(Object[] command, String lastLine) throws Exception {
         System.out.println("TextPanel.remove_id");                
         if(!useState.equals(this.none)) {                               
             dbms.remove(useState, command[1].toString(), command[2].toString());            
@@ -289,7 +291,7 @@ public class TextPanel extends javax.swing.JPanel {
     }
     
     //TESTED
-    private void remove_key(Object[] command, String lastLine) {
+    private void remove_key(Object[] command, String lastLine) throws Exception {
         System.out.println("TextPanel.remove_key");          
         if(!useState.equals(this.none)) {                               
             dbms.remove(useState, command[1].toString(), (ArrayList<String[]>)command[2]);            
