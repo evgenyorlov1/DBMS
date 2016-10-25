@@ -52,6 +52,11 @@
               <Connection code="new TableModel(this.rows, this.DBname, this.Tname)" type="code"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} catch(Exception e) {}"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="try {"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

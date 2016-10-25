@@ -44,7 +44,9 @@ public class TableFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new TableModel(this.rows, this.DBname, this.Tname));
+        try {
+            jTable1.setModel(new TableModel(this.rows, this.DBname, this.Tname));
+        } catch(Exception e) {}
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("close");
